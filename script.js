@@ -1,27 +1,21 @@
 const intro = document.querySelector("#intro");
 
+function removeIntroWhenComplete(event) {
+  if (event.target === intro && event.animationName === "intro-leave") {
+    intro.remove();
+  }
+}
+
 try {
-  if (window.sessionStorage.getItem("wedding-intro-v3")) {
+  if (window.sessionStorage.getItem("wedding-intro-v5")) {
     document.body.classList.add("intro-skip");
     intro.remove();
   } else {
-    window.sessionStorage.setItem("wedding-intro-v3", "true");
-    intro.addEventListener("animationend", () => intro.remove(), { once: true });
+    window.sessionStorage.setItem("wedding-intro-v5", "true");
+    intro.addEventListener("animationend", removeIntroWhenComplete);
   }
 } catch {
-  intro.addEventListener("animationend", () => intro.remove(), { once: true });
-}
-
-const weddingDate = new Date("2027-03-28T11:30:00+09:00");
-const dayDifference = Math.ceil((weddingDate - new Date()) / 86400000);
-const dDay = document.querySelector("#d-day");
-
-if (dayDifference > 0) {
-  dDay.textContent = `D-${dayDifference}`;
-} else if (dayDifference === 0) {
-  dDay.textContent = "TODAY";
-} else {
-  dDay.textContent = "2027.03.28";
+  intro.addEventListener("animationend", removeIntroWhenComplete);
 }
 
 const toast = document.querySelector("#toast");
@@ -33,6 +27,33 @@ function showToast(message) {
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
 }
+
+const music = document.querySelector("#background-music");
+const musicToggle = document.querySelector("#music-toggle");
+
+music.volume = 0.34;
+
+function updateMusicButton(isPlaying) {
+  musicToggle.classList.toggle("is-playing", isPlaying);
+  musicToggle.setAttribute("aria-pressed", String(isPlaying));
+  musicToggle.setAttribute("aria-label", isPlaying ? "배경음악 일시정지" : "배경음악 재생");
+}
+
+musicToggle.addEventListener("click", async () => {
+  if (!music.paused) {
+    music.pause();
+    return;
+  }
+
+  try {
+    await music.play();
+  } catch {
+    showToast("음악을 불러오지 못했습니다. 잠시 후 다시 눌러주세요.");
+  }
+});
+
+music.addEventListener("play", () => updateMusicButton(true));
+music.addEventListener("pause", () => updateMusicButton(false));
 
 document.querySelector("#copy-address").addEventListener("click", async () => {
   const address = document.querySelector("#venue-address").textContent.trim();
