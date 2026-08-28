@@ -15,19 +15,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&amp;family=Gowun+Batang:wght@400;700&amp;family=Nanum+Pen+Script&amp;display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&amp;family=Noto+Sans+KR:wght@300;400;500;600;700&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
   <body>
     <div class="intro" id="intro" aria-hidden="true">
       <div class="intro__card">
         <span class="intro__eyebrow">Wedding Invitation</span>
-        <strong class="intro__monogram">G<i>&amp;</i>S</strong>
-        <span class="intro__date">28 · MARCH · 2027</span>
+        <span class="intro__names">이기훈 · 한승미</span>
+        <span class="intro__note">with love</span>
       </div>
     </div>
+
+    <button
+      class="music-toggle"
+      id="music-toggle"
+      type="button"
+      aria-label="배경음악 재생"
+      aria-pressed="false"
+    >
+      <span class="music-toggle__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="music-toggle__label">Music</span>
+    </button>
+    <audio id="background-music" preload="none" loop>
+      <source
+        src="https://upload.wikimedia.org/wikipedia/commons/transcoded/9/90/Erik_Satie_-_gymnopedies_-_la_1_ere._lent_et_douloureux.ogg/Erik_Satie_-_gymnopedies_-_la_1_ere._lent_et_douloureux.ogg.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
 
     <main class="site">
       <header class="cover" aria-labelledby="cover-title">
@@ -35,16 +52,21 @@
 
         <div class="cover__top">
           <span>Wedding Invitation</span>
-          <span class="cover__issue">No. 0328</span>
+          <span class="cover__issue">Seoul</span>
         </div>
 
         <div class="cover__center">
-          <p class="cover__note">we're finally</p>
+          <p class="cover__note">with love,</p>
           <h1 class="cover__title" id="cover-title">
             <span>Getting</span>
-            <span>Married</span>
+            <span>Married.</span>
           </h1>
-          <div class="cover__seal" aria-hidden="true">G<i>&amp;</i>S</div>
+          <img
+            class="cover__illustration"
+            src="assets/wedding-couple.png"
+            alt=""
+            aria-hidden="true"
+          />
           <p class="cover__names">이기훈 <b>&amp;</b> 한승미</p>
         </div>
 
@@ -62,8 +84,8 @@
 
       <div class="ticker" aria-hidden="true">
         <div class="ticker__track">
-          이기훈 · 한승미 &nbsp; ✦ &nbsp; 28 MARCH 2027 &nbsp; ✦ &nbsp; 더채플앳청담 &nbsp; ✦ &nbsp;
-          이기훈 · 한승미 &nbsp; ✦ &nbsp; 28 MARCH 2027 &nbsp; ✦ &nbsp; 더채플앳청담 &nbsp; ✦ &nbsp;
+          이기훈 · 한승미 &nbsp; / &nbsp; <em>Wedding Invitation</em> &nbsp; / &nbsp; 더채플앳청담 &nbsp; / &nbsp;
+          이기훈 · 한승미 &nbsp; / &nbsp; <em>Wedding Invitation</em> &nbsp; / &nbsp; 더채플앳청담 &nbsp; / &nbsp;
         </div>
       </div>
 
@@ -87,52 +109,11 @@
         </div>
       </section>
 
-      <section class="section section--ink" aria-labelledby="date-title">
-        <div class="section__inner reveal">
-          <div class="section__head">
-            <p class="section__eyebrow">Save the Date</p>
-            <span class="section__number">02</span>
-          </div>
-          <h2 class="section__title" id="date-title">2027년 3월 28일</h2>
-
-          <div class="date-display" aria-hidden="true">
-            <span class="date-display__number">03</span>
-            <span class="date-display__slash">/</span>
-            <span class="date-display__number">28</span>
-          </div>
-
-          <div class="date-meta">
-            <span class="date-meta__month">March 2027 · Sunday</span>
-            <span class="date-meta__dday" id="d-day">SUNDAY</span>
-          </div>
-
-          <div class="calendar" aria-label="2027년 3월 달력">
-            <span class="weekday">SUN</span><span class="weekday">MON</span><span class="weekday">TUE</span><span class="weekday">WED</span><span class="weekday">THU</span><span class="weekday">FRI</span><span class="weekday">SAT</span>
-            <span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
-            <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
-            <span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
-            <span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span>
-            <span class="wedding-day">28</span><span>29</span><span>30</span><span>31</span><span></span><span></span><span></span>
-          </div>
-
-          <div class="date-place">
-            <div>
-              <small>Time</small>
-              <strong>오전 11시 30분</strong>
-            </div>
-            <div>
-              <small>Venue</small>
-              <strong>더채플앳청담</strong>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="section section--light" aria-labelledby="gallery-title">
         <div class="section__inner reveal">
           <div class="section__head">
             <p class="section__eyebrow">Our Moments</p>
-            <span class="section__number">03</span>
+            <span class="section__number">02</span>
           </div>
           <h2 class="section__title" id="gallery-title">우리의 순간</h2>
 
@@ -146,13 +127,9 @@
               </div>
               <figcaption class="gallery__caption">
                 <span>Our moment</span>
-                <span>01 / 03</span>
+                <span>01</span>
               </figcaption>
             </figure>
-            <div class="gallery__empty-row" aria-label="추가 사진 자리">
-              <div class="gallery__empty" aria-hidden="true"></div>
-              <div class="gallery__empty" aria-hidden="true"></div>
-            </div>
           </div>
         </div>
       </section>
@@ -161,7 +138,7 @@
         <div class="section__inner reveal">
           <div class="section__head">
             <p class="section__eyebrow">Location</p>
-            <span class="section__number">04</span>
+            <span class="section__number">03</span>
           </div>
           <h2 class="section__title" id="location-title">오시는 길</h2>
 
@@ -171,7 +148,7 @@
           </div>
 
           <div class="map" aria-label="더채플앳청담 위치 안내">
-            <div class="map__pin" aria-hidden="true"><span>G&amp;S</span></div>
+            <div class="map__pin" aria-hidden="true"></div>
             <span class="map__label">더채플앳청담</span>
           </div>
 
@@ -205,16 +182,20 @@
       </section>
 
       <footer class="footer">
-        <p class="footer__monogram">G<i>&amp;</i>S</p>
-        <p class="footer__date">28 · MARCH · 2027</p>
-        <p class="footer__source">
-          장소 정보는
-          <a href="https://thechapel.co.kr/home/index" target="_blank" rel="noreferrer">더채플 공식 홈페이지</a>를 기준으로 확인했습니다.
+        <p class="footer__note">with love,</p>
+        <p class="footer__names">이기훈 · 한승미</p>
+        <p class="footer__music">
+          Music · Erik Satie, Gymnopédie No. 1
+          <a
+            href="https://commons.wikimedia.org/wiki/File:Erik_Satie_-_gymnopedies_-_la_1_ere._lent_et_douloureux.ogg"
+            target="_blank"
+            rel="noreferrer"
+          >Public Domain</a>
         </p>
       </footer>
     </main>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=5"></script>
   </body>
 </html>
