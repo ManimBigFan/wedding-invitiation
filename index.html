@@ -9,6 +9,12 @@
       content="2027년 3월 28일 오전 11시 30분, 이기훈과 한승미의 결혼식에 초대합니다."
     />
     <title>이기훈 · 한승미 결혼합니다</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&amp;family=Gowun+Batang:wght@400;700&amp;family=Gowun+Dodum&amp;display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --forest-950: #071c17;
@@ -678,20 +684,780 @@
         }
       }
     </style>
+    <style id="paper-motion-theme">
+      :root {
+        --forest-950: #08261f;
+        --forest-900: #103b30;
+        --forest-800: #17493c;
+        --forest-700: #286052;
+        --paper: #f3eedf;
+        --paper-light: #faf7ed;
+        --paper-deep: #e9e0cd;
+        --ivory: #f8f3e8;
+        --ivory-soft: #efe7d7;
+        --brass: #9b7950;
+        --brass-soft: #cbb38d;
+        --ink: #12382f;
+        --muted: #6b716b;
+        --line: rgba(16, 59, 48, 0.32);
+        --hand: "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+        --serif: "Gowun Batang", "Noto Serif KR", "Batang", serif;
+        --sans: "Gowun Dodum", Pretendard, "Apple SD Gothic Neo", sans-serif;
+      }
+
+      html {
+        background: #d6d0c2;
+      }
+
+      body {
+        color: var(--ink);
+        background: #d6d0c2;
+        font-family: var(--sans);
+      }
+
+      .page-shell {
+        position: relative;
+        background-color: var(--paper);
+        background-image:
+          radial-gradient(circle at 16% 18%, rgba(16, 59, 48, 0.035) 0 0.7px, transparent 0.9px),
+          radial-gradient(circle at 79% 64%, rgba(155, 121, 80, 0.055) 0 0.8px, transparent 1px);
+        background-size: 17px 19px, 23px 29px;
+        box-shadow: 0 28px 85px rgba(8, 38, 31, 0.2);
+      }
+
+      .opening-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        padding: 28px;
+        color: var(--forest-900);
+        background:
+          radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.92), transparent 46%),
+          var(--paper);
+        animation: opening-away 2.35s cubic-bezier(0.72, 0, 0.2, 1) forwards;
+        pointer-events: none;
+      }
+
+      .opening-screen.skip {
+        display: none;
+      }
+
+      .opening-card {
+        width: min(78vw, 330px);
+        aspect-ratio: 4 / 5;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        padding: 36px 28px;
+        border: 2px solid var(--forest-900);
+        border-radius: 48% 52% 46% 54% / 4% 5% 4% 5%;
+        background: rgba(250, 247, 237, 0.86);
+        box-shadow: 14px 18px 0 rgba(16, 59, 48, 0.08);
+        text-align: center;
+        transform: rotate(-2deg) scale(0.82);
+        animation: opening-card-in 1.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+
+      .opening-date {
+        font-size: 0.68rem;
+        letter-spacing: 0.22em;
+      }
+
+      .opening-monogram {
+        margin: 22px 0 14px;
+        font-family: var(--hand);
+        font-size: clamp(5rem, 25vw, 7.5rem);
+        font-weight: 600;
+        line-height: 0.8;
+      }
+
+      .opening-monogram i {
+        color: var(--brass);
+        font-size: 0.58em;
+        font-style: normal;
+      }
+
+      .opening-note {
+        font-family: var(--hand);
+        font-size: 1.45rem;
+        letter-spacing: 0.02em;
+      }
+
+      .hero {
+        min-height: 100svh;
+        padding: 72px 30px 86px;
+        color: var(--forest-900);
+        background:
+          linear-gradient(rgba(250, 247, 237, 0.68), rgba(243, 238, 223, 0.9)),
+          radial-gradient(circle at 20% 16%, rgba(16, 59, 48, 0.08), transparent 25%),
+          var(--paper);
+      }
+
+      .hero::before {
+        inset: 20px;
+        z-index: 0;
+        border: 1.5px solid rgba(16, 59, 48, 0.34);
+        border-radius: 2% 1% 2% 1% / 1% 2% 1% 2%;
+        transform: rotate(-0.35deg);
+      }
+
+      .hero::after {
+        inset: 26px 24px 22px 27px;
+        z-index: 0;
+        border: 1px solid rgba(16, 59, 48, 0.1);
+        transform: rotate(0.4deg);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 540px;
+      }
+
+      .monogram,
+      .hero-mark {
+        display: none;
+      }
+
+      .eyebrow {
+        margin-bottom: 30px;
+        color: var(--forest-700);
+        font-family: var(--sans);
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.28em;
+        opacity: 0;
+        animation: stamp-in 620ms 1.85s ease forwards;
+      }
+
+      .hand-title {
+        margin: 0;
+        color: var(--forest-900);
+        font-family: var(--hand);
+        font-size: clamp(5.2rem, 25vw, 9rem);
+        font-weight: 600;
+        line-height: 0.67;
+        letter-spacing: -0.055em;
+      }
+
+      .hand-title .hand-line {
+        position: relative;
+        display: block;
+        opacity: 0;
+        transform: translateY(35px) rotate(-4deg) scale(0.92);
+        animation: hand-line-in 760ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+
+      .hand-title .hand-line:nth-child(1) {
+        margin-left: -0.32em;
+        text-align: left;
+        animation-delay: 1.85s;
+      }
+
+      .hand-title .hand-line:nth-child(2) {
+        margin-right: -0.22em;
+        text-align: right;
+        animation-delay: 2.03s;
+      }
+
+      .hand-title .hand-line:nth-child(3) {
+        margin-top: 0.08em;
+        text-align: center;
+        animation-delay: 2.21s;
+      }
+
+      .hand-title .hand-line:nth-child(3)::after {
+        position: absolute;
+        right: 12%;
+        bottom: -0.21em;
+        left: 9%;
+        height: 8px;
+        content: "";
+        border-top: 3px solid var(--forest-900);
+        border-radius: 50%;
+        transform: rotate(-2deg) scaleX(0);
+        transform-origin: left;
+        animation: ink-line 680ms 2.78s ease forwards;
+      }
+
+      .couple-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-top: 62px;
+        font-family: var(--serif);
+        font-size: 1.08rem;
+        letter-spacing: 0.12em;
+        opacity: 0;
+        animation: stamp-in 650ms 2.64s ease forwards;
+      }
+
+      .couple-line .heart {
+        color: var(--brass);
+        font-family: var(--hand);
+        font-size: 1.9rem;
+        line-height: 1;
+        animation: heart-beat 2.6s 3.2s ease-in-out infinite;
+      }
+
+      .hero-date {
+        margin-top: 30px;
+        font-family: var(--sans);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.19em;
+        opacity: 0;
+        animation: stamp-in 650ms 2.82s ease forwards;
+      }
+
+      .hero-venue {
+        color: rgba(16, 59, 48, 0.68);
+        font-size: 0.78rem;
+        opacity: 0;
+        animation: stamp-in 650ms 2.96s ease forwards;
+      }
+
+      .ink-mark {
+        position: absolute;
+        z-index: 1;
+        color: rgba(16, 59, 48, 0.72);
+        font-family: var(--hand);
+        line-height: 1;
+        user-select: none;
+        animation: ink-float 4.8s ease-in-out infinite;
+      }
+
+      .ink-mark--one {
+        top: 15%;
+        left: 9%;
+        font-size: 2rem;
+        transform: rotate(-16deg);
+      }
+
+      .ink-mark--two {
+        top: 21%;
+        right: 8%;
+        color: rgba(155, 121, 80, 0.8);
+        font-size: 2.7rem;
+        animation-delay: -1.4s;
+      }
+
+      .ink-mark--three {
+        right: 11%;
+        bottom: 16%;
+        font-size: 2.2rem;
+        animation-delay: -2.6s;
+      }
+
+      .ink-mark--four {
+        bottom: 22%;
+        left: 10%;
+        color: rgba(155, 121, 80, 0.75);
+        font-size: 1.7rem;
+        animation-delay: -3.3s;
+      }
+
+      .sketch-rings {
+        position: absolute;
+        right: 11%;
+        bottom: 9%;
+        z-index: 1;
+        width: 72px;
+        height: 42px;
+        opacity: 0.22;
+        transform: rotate(-12deg);
+      }
+
+      .sketch-rings span {
+        position: absolute;
+        width: 42px;
+        height: 32px;
+        border: 2px solid var(--forest-900);
+        border-radius: 50%;
+      }
+
+      .sketch-rings span:last-child {
+        right: 0;
+        bottom: 0;
+      }
+
+      .scroll-hint {
+        bottom: 34px;
+        z-index: 3;
+        color: rgba(16, 59, 48, 0.52);
+        font-family: var(--hand);
+        font-size: 0.9rem;
+        letter-spacing: 0.12em;
+      }
+
+      .scroll-hint::after {
+        background: var(--forest-700);
+      }
+
+      .paper-ticker {
+        position: relative;
+        z-index: 4;
+        overflow: hidden;
+        border-top: 1px solid var(--forest-900);
+        border-bottom: 1px solid var(--forest-900);
+        color: var(--paper-light);
+        background: var(--forest-900);
+        transform: rotate(-1deg) scale(1.02);
+      }
+
+      .ticker-track {
+        width: max-content;
+        padding: 10px 0 9px;
+        font-family: var(--hand);
+        font-size: 1.05rem;
+        letter-spacing: 0.16em;
+        animation: ticker-move 19s linear infinite;
+      }
+
+      .section {
+        position: relative;
+        padding: 112px 30px;
+        background-color: var(--paper-light);
+        background-image: radial-gradient(rgba(16, 59, 48, 0.04) 0.7px, transparent 0.8px);
+        background-size: 18px 18px;
+      }
+
+      .section--green {
+        color: var(--paper-light);
+        background:
+          radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.04), transparent 28%),
+          var(--forest-900);
+      }
+
+      .section--soft {
+        background-color: var(--paper-deep);
+      }
+
+      .section-kicker {
+        margin-bottom: 14px;
+        color: var(--brass);
+        font-family: var(--hand);
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: none;
+      }
+
+      .section--green .section-kicker {
+        color: var(--brass-soft);
+      }
+
+      .section-heading {
+        color: inherit;
+        font-family: var(--serif);
+        font-size: clamp(2.15rem, 9.4vw, 3.65rem);
+        font-weight: 700;
+        line-height: 1.28;
+        letter-spacing: -0.055em;
+      }
+
+      .section-heading em {
+        position: relative;
+        color: inherit;
+        font-style: normal;
+      }
+
+      .section-heading em::after {
+        position: absolute;
+        right: -0.06em;
+        bottom: -0.08em;
+        left: -0.06em;
+        height: 7px;
+        content: "";
+        border-top: 2px solid var(--brass);
+        border-radius: 50%;
+        transform: rotate(-1deg);
+      }
+
+      #invitation::before {
+        position: absolute;
+        top: 40px;
+        right: 34px;
+        content: "♡";
+        color: rgba(16, 59, 48, 0.1);
+        font-family: var(--hand);
+        font-size: 7.5rem;
+        line-height: 1;
+        transform: rotate(13deg);
+      }
+
+      .invitation-copy {
+        color: #475e57;
+        font-family: var(--serif);
+        line-height: 2.2;
+      }
+
+      .couple-signature {
+        color: var(--forest-900);
+        font-family: var(--hand);
+        font-size: 1.24rem;
+        letter-spacing: 0.03em;
+        transform: rotate(-1deg);
+      }
+
+      .couple-signature::before {
+        height: 2px;
+        background: var(--forest-900);
+        transform: rotate(-4deg);
+      }
+
+      .date-card {
+        margin-top: 48px;
+        padding: 36px 24px 30px;
+        border: 1.5px solid rgba(243, 238, 223, 0.7);
+        border-radius: 2% 1% 2% 1% / 1% 2% 1% 2%;
+        background: rgba(255, 255, 255, 0.025);
+        box-shadow: 8px 10px 0 rgba(0, 0, 0, 0.08);
+        transform: rotate(-0.55deg);
+      }
+
+      .date-card::before {
+        top: -13px;
+        width: 76px;
+        height: 24px;
+        background: rgba(225, 205, 169, 0.75);
+        transform: translateX(-50%) rotate(1.8deg);
+      }
+
+      .date-number {
+        color: var(--paper-light);
+        font-family: var(--hand);
+        font-size: clamp(5.8rem, 27vw, 8.8rem);
+        font-weight: 600;
+      }
+
+      .date-meta strong {
+        font-family: var(--hand);
+        font-size: 1.55rem;
+        font-weight: 600;
+      }
+
+      .calendar,
+      .date-meta span {
+        font-family: var(--sans);
+      }
+
+      .calendar .wedding-day {
+        position: relative;
+        color: var(--forest-950);
+        background: var(--paper-light);
+      }
+
+      .calendar .wedding-day::after {
+        position: absolute;
+        inset: -5px -7px;
+        content: "";
+        border: 1.5px solid var(--paper-light);
+        border-radius: 50%;
+        transform: rotate(-12deg);
+      }
+
+      section[aria-labelledby="gallery-heading"] {
+        color: var(--forest-900);
+        background-color: var(--paper-light);
+        background-image: radial-gradient(rgba(16, 59, 48, 0.045) 0.7px, transparent 0.8px);
+        background-size: 19px 19px;
+      }
+
+      section[aria-labelledby="gallery-heading"] .section-kicker {
+        color: var(--brass);
+      }
+
+      .gallery-grid {
+        gap: 16px;
+        margin-top: 52px;
+      }
+
+      .photo-placeholder {
+        min-height: 180px;
+        overflow: visible;
+        border: 1.5px solid var(--forest-900);
+        border-radius: 1% 2% 1% 2% / 2% 1% 2% 1%;
+        color: var(--forest-900);
+        background: var(--paper-deep);
+        box-shadow: 7px 8px 0 rgba(16, 59, 48, 0.1);
+      }
+
+      .photo-placeholder:first-child {
+        z-index: 2;
+        overflow: hidden;
+        transform: rotate(-1.1deg);
+      }
+
+      .photo-placeholder:first-child::before {
+        position: absolute;
+        top: -1px;
+        left: 50%;
+        z-index: 2;
+        width: 92px;
+        height: 25px;
+        content: "";
+        background: rgba(232, 218, 190, 0.84);
+        transform: translateX(-50%) rotate(1.7deg);
+      }
+
+      .photo-placeholder:nth-child(2) {
+        transform: rotate(1.4deg);
+      }
+
+      .photo-placeholder:nth-child(3) {
+        transform: rotate(-1.3deg);
+      }
+
+      .photo-placeholder::after {
+        inset: 8px;
+        border: 1px dashed rgba(16, 59, 48, 0.3);
+      }
+
+      .photo-placeholder img {
+        object-position: center 48%;
+        filter: saturate(0.86) sepia(0.08) contrast(0.97);
+        transform: scale(1.035);
+        animation: photo-drift 9s ease-in-out infinite alternate;
+      }
+
+      .section--soft {
+        border-top: 1px solid rgba(16, 59, 48, 0.22);
+        border-bottom: 1px solid rgba(16, 59, 48, 0.22);
+      }
+
+      .venue-name {
+        font-family: var(--serif);
+        font-weight: 700;
+      }
+
+      .map-frame {
+        border: 1.5px solid var(--forest-900);
+        border-radius: 2% 1% 2% 1% / 1% 2% 1% 2%;
+        background:
+          linear-gradient(90deg, rgba(16, 59, 48, 0.08) 1px, transparent 1px) 0 0 / 38px 38px,
+          linear-gradient(rgba(16, 59, 48, 0.08) 1px, transparent 1px) 0 0 / 38px 38px,
+          var(--paper-light);
+        box-shadow: 7px 8px 0 rgba(16, 59, 48, 0.09);
+        transform: rotate(0.45deg);
+      }
+
+      .map-pin {
+        background: var(--forest-900);
+        box-shadow: 0 14px 30px rgba(16, 59, 48, 0.2);
+        animation: pin-float 3s ease-in-out infinite;
+      }
+
+      .map-label {
+        font-family: var(--hand);
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .action-button {
+        border: 1.5px solid var(--forest-900);
+        border-radius: 48% 52% 46% 54% / 12% 14% 10% 12%;
+        color: var(--forest-900);
+        background: rgba(250, 247, 237, 0.38);
+        font-family: var(--sans);
+        transform: rotate(-0.25deg);
+      }
+
+      .action-button:nth-child(2) {
+        transform: rotate(0.45deg);
+      }
+
+      .action-button:nth-child(3) {
+        transform: rotate(-0.65deg);
+      }
+
+      .direction-label {
+        font-family: var(--hand);
+        font-size: 1.05rem;
+      }
+
+      .footer {
+        padding-top: 88px;
+        background: var(--paper);
+      }
+
+      .footer-monogram {
+        color: var(--forest-900);
+        font-family: var(--hand);
+        font-size: 3.2rem;
+        font-style: normal;
+        transform: rotate(-2deg);
+      }
+
+      .footer-copy {
+        font-family: var(--serif);
+      }
+
+      .reveal {
+        opacity: 0;
+        clip-path: inset(0 0 16% 0);
+        transform: translateY(52px) rotate(0.65deg);
+        transition:
+          opacity 900ms ease,
+          clip-path 950ms cubic-bezier(0.2, 0.8, 0.2, 1),
+          transform 950ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .reveal.is-visible {
+        opacity: 1;
+        clip-path: inset(0);
+        transform: translateY(0) rotate(0deg);
+      }
+
+      .reveal > * {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 680ms ease,
+          transform 720ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .reveal.is-visible > * {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .reveal.is-visible > :nth-child(1) { transition-delay: 90ms; }
+      .reveal.is-visible > :nth-child(2) { transition-delay: 180ms; }
+      .reveal.is-visible > :nth-child(3) { transition-delay: 290ms; }
+      .reveal.is-visible > :nth-child(4) { transition-delay: 390ms; }
+      .reveal.is-visible > :nth-child(5) { transition-delay: 470ms; }
+
+      .toast {
+        border-radius: 48% 52% 46% 54% / 18% 16% 20% 17%;
+        font-family: var(--sans);
+      }
+
+      @keyframes opening-card-in {
+        0% { opacity: 0; transform: translateY(42px) rotate(-6deg) scale(0.82); }
+        62% { opacity: 1; transform: translateY(0) rotate(1.4deg) scale(1.02); }
+        100% { opacity: 1; transform: rotate(-1.5deg) scale(1); }
+      }
+
+      @keyframes opening-away {
+        0%, 68% { opacity: 1; visibility: visible; }
+        100% { opacity: 0; visibility: hidden; }
+      }
+
+      @keyframes hand-line-in {
+        to { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+      }
+
+      @keyframes stamp-in {
+        from { opacity: 0; transform: translateY(10px) scale(1.06); filter: blur(3px); }
+        to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+      }
+
+      @keyframes ink-line {
+        to { transform: rotate(-2deg) scaleX(1); }
+      }
+
+      @keyframes ink-float {
+        0%, 100% { translate: 0 0; rotate: -4deg; }
+        50% { translate: 0 -9px; rotate: 5deg; }
+      }
+
+      @keyframes heart-beat {
+        0%, 82%, 100% { transform: scale(1) rotate(-4deg); }
+        88% { transform: scale(1.2) rotate(3deg); }
+        94% { transform: scale(0.95) rotate(-2deg); }
+      }
+
+      @keyframes ticker-move {
+        to { transform: translateX(-50%); }
+      }
+
+      @keyframes photo-drift {
+        from { transform: scale(1.035) translate3d(-0.5%, -0.3%, 0); }
+        to { transform: scale(1.085) translate3d(0.6%, 0.5%, 0); }
+      }
+
+      @keyframes pin-float {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -8px; }
+      }
+
+      @media (max-width: 420px) {
+        .hero {
+          padding-inline: 26px;
+        }
+
+        .hand-title {
+          font-size: clamp(5rem, 27vw, 7.2rem);
+        }
+
+        .couple-line {
+          gap: 12px;
+          font-size: 0.98rem;
+        }
+
+        .section {
+          padding: 96px 24px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .opening-screen {
+          display: none;
+        }
+
+        .eyebrow,
+        .hand-title .hand-line,
+        .couple-line,
+        .hero-date,
+        .hero-venue {
+          opacity: 1;
+          filter: none;
+          transform: none;
+        }
+
+        .hand-title .hand-line:nth-child(3)::after {
+          transform: rotate(-2deg) scaleX(1);
+        }
+
+        .reveal,
+        .reveal > * {
+          opacity: 1;
+          clip-path: none;
+          transform: none;
+        }
+      }
+    </style>
   </head>
   <body>
+    <div class="opening-screen" id="opening-screen" aria-hidden="true">
+      <div class="opening-card">
+        <span class="opening-date">28 · MARCH · 2027</span>
+        <strong class="opening-monogram">G<i>+</i>S</strong>
+        <span class="opening-note">we're getting married</span>
+      </div>
+    </div>
     <main class="page-shell">
       <section class="hero" aria-labelledby="hero-title">
         <span class="monogram" aria-hidden="true">GS</span>
+        <span class="ink-mark ink-mark--one" aria-hidden="true">✦</span>
+        <span class="ink-mark ink-mark--two" aria-hidden="true">＊</span>
+        <span class="ink-mark ink-mark--three" aria-hidden="true">♡</span>
+        <span class="ink-mark ink-mark--four" aria-hidden="true">✷</span>
+        <span class="sketch-rings" aria-hidden="true"><span></span><span></span></span>
         <div class="hero-content">
-          <p class="eyebrow">Wedding Invitation</p>
-          <div class="hero-mark" aria-hidden="true">G·S</div>
-          <h1 class="names" id="hero-title">
-            이기훈
-            <span class="ampersand">and</span>
-            한승미
+          <p class="eyebrow">Wedding Invitation · 2027</p>
+          <h1 class="hand-title" id="hero-title">
+            <span class="hand-line">We're</span>
+            <span class="hand-line">getting</span>
+            <span class="hand-line">married!</span>
           </h1>
-          <div class="hero-rule" aria-hidden="true"></div>
+          <div class="couple-line">
+            <span>이기훈</span><span class="heart" aria-hidden="true">♡</span><span>한승미</span>
+          </div>
           <p class="hero-date">2027 · 03 · 28 · SUN</p>
           <p class="hero-venue">오전 11시 30분 · 더채플앳청담</p>
         </div>
@@ -699,6 +1465,13 @@
           SCROLL
         </a>
       </section>
+
+      <div class="paper-ticker" aria-hidden="true">
+        <div class="ticker-track">
+          GROOM · 이기훈 &nbsp; ♡ &nbsp; BRIDE · 한승미 &nbsp; ✦ &nbsp; 28 MARCH 2027 &nbsp; ♡ &nbsp;
+          GROOM · 이기훈 &nbsp; ♡ &nbsp; BRIDE · 한승미 &nbsp; ✦ &nbsp; 28 MARCH 2027 &nbsp; ♡ &nbsp;
+        </div>
+      </div>
 
       <section class="section" id="invitation">
         <div class="section-inner reveal">
@@ -812,6 +1585,20 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
+      const openingScreen = document.querySelector("#opening-screen");
+
+      try {
+        if (window.sessionStorage.getItem("wedding-intro-seen")) {
+          openingScreen.classList.add("skip");
+        } else {
+          window.sessionStorage.setItem("wedding-intro-seen", "true");
+        }
+      } catch {
+        // 저장소 접근이 제한된 브라우저에서도 기본 인트로 모션은 그대로 재생합니다.
+      }
+
+      openingScreen.addEventListener("animationend", () => openingScreen.remove(), { once: true });
+
       const weddingDate = new Date("2027-03-28T11:30:00+09:00");
       const now = new Date();
       const dayDifference = Math.ceil((weddingDate - now) / 86400000);
