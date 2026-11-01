@@ -21,6 +21,7 @@
       else link.removeAttribute('aria-current');
     });
     if (scroll) window.scrollTo({ top: 0, behavior: 'instant' });
+    document.dispatchEvent(new CustomEvent('wedding:designchange', { detail: selected }));
   }
 
   applyDesign(new URLSearchParams(location.search).get('design'));
@@ -126,19 +127,30 @@
   });
 
   const dialog = document.getElementById('photo-dialog');
-  const openPhoto = document.getElementById('open-photo');
+  const photoOpeners = document.querySelectorAll('[data-open-photo]');
   const closePhoto = document.getElementById('close-photo');
+  const photoColor = document.getElementById('photo-color');
+  let photoOpener;
   let previousOverflow = '';
 
-  openPhoto.addEventListener('click', () => {
+  photoOpeners.forEach(opener => opener.addEventListener('click', () => {
     if (typeof dialog.showModal !== 'function') {
-      window.open(openPhoto.querySelector('img').src, '_blank', 'noopener');
+      window.open(opener.querySelector('img').src, '_blank', 'noopener');
       return;
     }
+    photoOpener = opener;
+    dialog.dataset.monochrome = String(document.documentElement.dataset.design === 'letter');
+    photoColor.setAttribute('aria-pressed', 'false');
+    photoColor.textContent = '원본 색감 보기';
     previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     dialog.showModal();
     closePhoto.focus();
+  }));
+  photoColor.addEventListener('click', () => {
+    const showColor = dialog.dataset.monochrome === 'true';
+    dialog.dataset.monochrome = String(!showColor);
+    photoColor.setAttribute('aria-pressed', String(showColor));
   });
   closePhoto.addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => {
@@ -146,6 +158,6 @@
   });
   dialog.addEventListener('close', () => {
     document.body.style.overflow = previousOverflow;
-    openPhoto.focus({ preventScroll: true });
+    photoOpener?.focus({ preventScroll: true });
   });
 })();
