@@ -1,8 +1,49 @@
 (() => {
   'use strict';
 
-  // The opening is immediate. Only content entering the viewport is animated.
+  const root = document.documentElement;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const introBootstrap = window.__weddingEnvelopeIntro;
+  let introTimer;
+  const introListeners = [];
+
+  function finishIntro() {
+    clearTimeout(introTimer);
+    clearTimeout(introBootstrap?.timer);
+    root.removeAttribute('data-auto-envelope');
+    delete window.__weddingEnvelopeIntro;
+    introListeners.splice(0).forEach(([target, type, callback, options]) => {
+      target.removeEventListener(type, callback, options);
+    });
+  }
+
+  function watchIntro(target, type, callback = finishIntro, options) {
+    target.addEventListener(type, callback, options);
+    introListeners.push([target, type, callback, options]);
+  }
+
+  if (root.hasAttribute('data-auto-envelope')) {
+    if (motion.matches || root.dataset.design !== 'letter' ||
+        (location.hash && location.hash !== '#top') || window.scrollY > 2 || document.hidden) {
+      finishIntro();
+    } else {
+      // Play once on entry. Reading, navigating, or interacting always takes priority.
+      // Start cleanup after styles and this script are ready, independent of network delay.
+      clearTimeout(introBootstrap?.timer);
+      introTimer = setTimeout(finishIntro, 1800);
+      ['pointerdown', 'touchstart', 'wheel', 'scroll'].forEach(type => {
+        watchIntro(window, type, finishIntro, { passive: true, capture: true });
+      });
+      watchIntro(window, 'keydown', finishIntro, true);
+      watchIntro(document, 'focusin');
+      watchIntro(document, 'wedding:designchange');
+      watchIntro(window, 'hashchange');
+      watchIntro(window, 'pagehide');
+      watchIntro(document, 'visibilitychange', () => { if (document.hidden) finishIntro(); });
+    }
+  } else {
+    finishIntro();
+  }
   const revealTargets = [...document.querySelectorAll(
     '.invitation-section > *, .moments-section > *, .date-section > *, .location-section > *, .guest-photo-section > *, .closing > *'
   )];
@@ -41,6 +82,6 @@
   }
 
   motion.addEventListener?.('change', () => {
-    if (motion.matches) revealAll();
+    if (motion.matches) { finishIntro(); revealAll(); }
   });
 })();

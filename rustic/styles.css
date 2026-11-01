@@ -14,7 +14,34 @@
 
 .design-switcher a[aria-current="page"],.design-switcher a[aria-current="page"]:hover{background:var(--ink);color:var(--paper-light)}
 
-/* Passive scroll motion; the invitation is visible immediately. */
+/* The paper envelope opens on its own and never intercepts input. */
+.letter-card{display:flex;flex-direction:column;align-items:center;width:100%}
+.envelope-intro{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;padding:42px 27px;z-index:4;pointer-events:none;user-select:none}
+.envelope-greeting{font-size:23px;font-weight:400;line-height:1.8;letter-spacing:.7px;margin:20px 0 18px}
+.envelope-visual{display:block;width:min(300px,100%);perspective:1000px}
+.envelope-model{position:relative;display:block;height:230px;perspective:1000px;isolation:isolate}
+.envelope-back{position:absolute;inset:50px 0 0;background:#dcd3c1;box-shadow:0 12px 28px #67583e18,0 1px 2px #6b5c432e;border-radius:2px}
+.envelope-paper{position:absolute;inset:60px 15px 14px;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;background:#faf7ef;border:1px solid #fffaf0;box-shadow:0 -2px 6px #7563480a}
+.envelope-paper>span{font-family:var(--english);font-size:9px;letter-spacing:2px}
+.envelope-paper strong{font-size:19px;font-weight:400;letter-spacing:3px}
+.envelope-paper small{font-family:var(--english);font-size:13px;letter-spacing:2px}
+.envelope-front{position:absolute;inset:50px 0 0;z-index:3;background:linear-gradient(145deg,#f5f0e4,#e8dfcf);clip-path:polygon(0 0,50% 49%,100% 0,100% 100%,0 100%);border:1px solid #d9cfbd;border-radius:2px}
+.envelope-front::after{content:"";position:absolute;inset:0;background:linear-gradient(31deg,transparent 49.6%,#c7bba34d 50%,transparent 50.6%),linear-gradient(-31deg,transparent 49.6%,#c7bba34d 50%,transparent 50.6%);opacity:.7}
+.envelope-flap{position:absolute;left:0;right:0;top:50px;height:114px;z-index:4;transform-origin:top center;backface-visibility:hidden;clip-path:polygon(0 0,100% 0,50% 100%);background:linear-gradient(#eee7d8,#e4dac8);filter:drop-shadow(0 1px 1px #89795933)}
+.envelope-from{font-size:12px;letter-spacing:1.6px;margin-top:25px}
+.envelope-when{font-size:10px;color:var(--muted);margin-top:10px}
+[data-design=letter][data-auto-envelope] .envelope-intro{display:flex;animation:envelope-intro-away .28s 1.08s ease both}
+[data-design=letter][data-auto-envelope] .envelope-flap{animation:envelope-flap-open .44s .38s cubic-bezier(.4,0,.2,1) both}
+[data-design=letter][data-auto-envelope] .envelope-paper{animation:envelope-letter-lift .55s .64s cubic-bezier(.22,1,.36,1) both}
+[data-design=letter][data-auto-envelope] .letter-card{animation:letter-arrive .43s 1.24s cubic-bezier(.22,1,.36,1) both}
+@keyframes envelope-flap-open{to{transform:rotateX(178deg)}}
+@keyframes envelope-letter-lift{to{transform:translateY(-88px) rotate(-2deg)}}
+@keyframes envelope-intro-away{to{opacity:0;transform:translateY(12px)}}
+@keyframes letter-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(max-width:359px){.envelope-model{height:210px}.envelope-flap{height:103px}.envelope-greeting{font-size:21px}}
+@media(prefers-reduced-motion:reduce){[data-auto-envelope] .envelope-intro{display:none!important}[data-auto-envelope] .letter-card{opacity:1!important;transform:none!important}}
+
+/* Passive scroll motion for the rest of the invitation. */
 [hidden]{display:none!important}
 [data-design=letter] .reveal-ready{transition:opacity .7s ease var(--reveal-delay,0ms),transform .7s cubic-bezier(.22,1,.36,1) var(--reveal-delay,0ms)}
 [data-design=letter] .reveal-ready:not(.is-revealed):not(:focus-within){opacity:0;transform:translateY(18px)}

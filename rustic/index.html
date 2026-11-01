@@ -12,10 +12,31 @@
   <meta property="og:image:alt" content="함께 웃고 있는 기훈과 승미">
   <title>이기훈 · 한승미의 결혼식에 초대합니다</title>
   <script>try{var design=new URLSearchParams(location.search).get('design');if(['letter','photo','emboss'].includes(design))document.documentElement.dataset.design=design;}catch(e){}</script>
+  <script>
+    // Opt in before the first paint; without JavaScript the invitation stays visible.
+    try {
+      var introRoot = document.documentElement;
+      var introNavigation = performance.getEntriesByType('navigation')[0];
+      if (introRoot.dataset.design === 'letter' && (!location.hash || location.hash === '#top') &&
+          !matchMedia('(prefers-reduced-motion: reduce)').matches && introNavigation?.type !== 'back_forward') {
+        introRoot.setAttribute('data-auto-envelope', '');
+        window.__weddingEnvelopeIntro = { timer: null };
+        document.addEventListener('DOMContentLoaded', function () {
+          var introState = window.__weddingEnvelopeIntro;
+          if (!introState || !introRoot.hasAttribute('data-auto-envelope')) return;
+          introState.timer = setTimeout(function () {
+            if (window.__weddingEnvelopeIntro !== introState) return;
+            introRoot.removeAttribute('data-auto-envelope');
+            delete window.__weddingEnvelopeIntro;
+          }, 1900);
+        }, { once: true });
+      }
+    } catch (error) { document.documentElement.removeAttribute('data-auto-envelope'); }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
   <a class="skip-link" href="#invitation">초대의 글로 건너뛰기</a>
@@ -28,6 +49,21 @@
 
   <main class="invitation-page" id="top">
     <header class="hero hero--letter" aria-labelledby="letter-title">
+      <div class="envelope-intro" aria-hidden="true">
+        <p class="eyebrow">A LETTER FOR YOU</p>
+        <p class="envelope-greeting">당신에게<br>전하고 싶은 소식</p>
+        <div class="envelope-visual">
+          <div class="envelope-model">
+            <span class="envelope-back"></span>
+            <span class="envelope-paper"><span>THE WEDDING OF</span><strong>이기훈 · 한승미</strong><small>2027. 03. 28.</small></span>
+            <span class="envelope-front"></span>
+            <span class="envelope-flap"></span>
+          </div>
+        </div>
+        <p class="envelope-from">이기훈 · 한승미 드림</p>
+        <p class="envelope-when">2027. 03. 28. · 오전 11시 30분</p>
+      </div>
+      <div class="letter-card">
       <p class="eyebrow hero__eyebrow">THE WEDDING OF</p>
       <div class="postage hero__stamp">
         <img src="../assets/our-moment.jpg" alt="함께 누워 웃고 있는 기훈과 승미" width="1536" height="1152" fetchpriority="high">
@@ -40,6 +76,7 @@
         <p class="hero__venue">더채플앳청담</p>
       </div>
       <a class="scroll-cue" href="#invitation" aria-label="아래로 스크롤하여 초대의 글 보기"><span>당신에게 전하는 초대</span><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1v26M4 19l8 8 8-8"/></svg></a>
+      </div>
       <div class="sleeve-edge" aria-hidden="true"></div>
     </header>
 
@@ -180,9 +217,9 @@
     </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js?v=4"></script>
-  <script src="config.js?v=4"></script>
-  <script src="guest-upload.js?v=4"></script>
-  <script src="interactions.js?v=4"></script>
+  <script src="script.js?v=5"></script>
+  <script src="config.js?v=5"></script>
+  <script src="guest-upload.js?v=5"></script>
+  <script src="interactions.js?v=5"></script>
 </body>
 </html>
