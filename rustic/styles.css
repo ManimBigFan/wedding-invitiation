@@ -77,7 +77,7 @@
 .promise-art{position:absolute;inset:135px 0 104px;min-height:210px;pointer-events:none}
 .promise-art canvas,.promise-fallback{position:absolute;inset:0;width:100%;height:100%;display:block}
 .promise-art canvas{opacity:0}
-.promise-story.is-rendered .promise-art canvas{opacity:1}
+.promise-story.is-rendered[data-renderer=webgl] #promise-canvas,.promise-story.is-rendered[data-renderer=canvas] #promise-software{opacity:1}
 .promise-story.is-rendered .promise-fallback{display:none}
 .promise-fallback{stroke:none}
 .promise-ground{position:absolute;left:12%;right:12%;bottom:3%;height:28px;border-radius:50%;background:radial-gradient(ellipse,#7b603b2c,transparent 68%);filter:blur(8px);transform:scaleX(var(--story-shadow,1));opacity:.5}

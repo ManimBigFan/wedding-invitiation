@@ -105,8 +105,11 @@
   const story = document.getElementById('promise-story');
   const stage = story?.querySelector('.promise-stage');
   const canvas = document.getElementById('promise-canvas');
+  const softwareCanvas = document.getElementById('promise-software');
   let renderer;
-  let rendererFailed = false;
+  let rendererKind = '';
+  let webglFailed = false;
+  let softwareFailed = false;
   let storyAnimated = false;
   let storyTop = 0;
   let storyHeight = 0;
@@ -138,12 +141,17 @@
   const phase = (start, end, value) => ease(clamp((value - start) / (end - start)));
 
   function failStory() {
-    rendererFailed = true;
+    const failedKind = rendererKind;
+    if (failedKind === 'webgl') webglFailed = true;
+    else if (failedKind === 'canvas') softwareFailed = true;
     try { renderer?.dispose(); } catch { /* A lost context already released its buffers. */ }
     renderer = null;
+    rendererKind = '';
     storyAnimated = false;
     story?.classList.remove('is-animated', 'is-rendered');
     story?.removeAttribute('style');
+    story?.removeAttribute('data-renderer');
+    if (failedKind === 'webgl' && !softwareFailed && root.dataset.design === 'letter') selectStory();
     schedule(true);
   }
 
@@ -153,21 +161,32 @@
     lastStory = -1;
     redrawStory = true;
     const selected = root.dataset.design === 'letter';
-    if (selected && !renderer && !rendererFailed) {
-      try { renderer = window.WeddingRings?.create(canvas); }
-      catch { rendererFailed = true; }
+    if (selected && !renderer && !webglFailed) {
+      try {
+        renderer = window.WeddingRings?.create(canvas);
+        if (renderer) rendererKind = 'webgl';
+        else webglFailed = true;
+      } catch { webglFailed = true; }
+    }
+    if (selected && !renderer && !softwareFailed && softwareCanvas) {
+      try {
+        renderer = window.WeddingRingsFallback?.create(softwareCanvas);
+        if (renderer) rendererKind = 'canvas';
+        else softwareFailed = true;
+      } catch { softwareFailed = true; }
     }
     storyAnimated = Boolean(selected && enabled && renderer && window.CSS?.supports?.('overflow', 'clip'));
     story.classList.toggle('is-animated', storyAnimated);
     if (selected && renderer) {
       try {
         if (!renderer.render(storyAnimated ? 0 : 1)) { failStory(); return; }
+        story.dataset.renderer = rendererKind;
         story.classList.add('is-rendered');
       } catch { failStory(); }
     }
   }
 
-  canvas?.addEventListener('webglcontextlost', failStory);
+  canvas?.addEventListener('webglcontextlost', () => { if (rendererKind === 'webgl') failStory(); });
 
   function update() {
     frame = 0;

@@ -3,6 +3,7 @@
   'use strict';
 
   const vertexSource = `
+    precision mediump float;
     attribute vec3 aPosition;
     attribute vec3 aNormal;
     uniform mat4 uModel;
@@ -70,6 +71,7 @@
   `;
 
   const shadowVertex = `
+    precision mediump float;
     attribute vec2 aPosition;
     varying vec2 vUV;
     void main() { vUV = aPosition * 0.5 + 0.5; gl_Position = vec4(aPosition, 0.0, 1.0); }
@@ -117,14 +119,15 @@
 
   function create(canvas) {
     if (!canvas || typeof canvas.getContext !== 'function') return null;
+    canvas.dataset.rendererStatus = 'initializing';
     let gl;
     try {
       gl = canvas.getContext('webgl', {
         alpha: true, antialias: true, depth: true, stencil: false,
         premultipliedAlpha: false, preserveDrawingBuffer: false, powerPreference: 'low-power'
       });
-    } catch { return null; }
-    if (!gl) return null;
+    } catch { canvas.dataset.rendererStatus = 'context-error'; return null; }
+    if (!gl) { canvas.dataset.rendererStatus = 'webgl-unavailable'; return null; }
 
     const buffers = [], programs = [], shaders = [];
     let disposed = false;
@@ -151,11 +154,19 @@
         shaders.push(shader);
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
-        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) throw new Error('WebGL shader could not compile');
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          canvas.dataset.rendererStatus = 'shader-error';
+          canvas.dataset.rendererDetail = gl.getShaderInfoLog(shader) || '';
+          throw new Error('WebGL shader could not compile');
+        }
         gl.attachShader(result, shader);
       });
       gl.linkProgram(result);
-      if (!gl.getProgramParameter(result, gl.LINK_STATUS)) throw new Error('WebGL program could not link');
+      if (!gl.getProgramParameter(result, gl.LINK_STATUS)) {
+        canvas.dataset.rendererStatus = 'link-error';
+        canvas.dataset.rendererDetail = gl.getProgramInfoLog(result) || '';
+        throw new Error('WebGL program could not link');
+      }
       return result;
     }
 
@@ -307,8 +318,9 @@
         new Float32Array([0.84, 0.64, 0.355]));
 
       if (!verified) {
-        if (gl.getError() !== gl.NO_ERROR) return false;
+        if (gl.getError() !== gl.NO_ERROR) { canvas.dataset.rendererStatus = 'draw-error'; return false; }
         verified = true;
+        canvas.dataset.rendererStatus = 'drawn';
       }
       return true;
     }
