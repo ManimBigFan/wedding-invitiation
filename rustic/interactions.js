@@ -44,11 +44,75 @@
     finishIntro();
   }
 
+  // Readable HTML is the default. Only a working observer opts copy into reveals.
+  const textTargets = [...document.querySelectorAll('.section h2, .invitation-copy, .moment-note, .guest-photo-copy, .closing__message')];
+  const softTargets = [...document.querySelectorAll('.section .eyebrow, .signature, .closing__script, .closing__names')];
+  let textObserver;
+  function revealCopy() {
+    textObserver?.disconnect();
+    [...textTargets, ...softTargets].forEach(element => element.classList.add('is-revealed'));
+  }
+  if (!motion.matches && 'IntersectionObserver' in window) {
+    try {
+      textObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            textObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12, rootMargin: '0px 0px -28px 0px' });
+      textTargets.forEach(element => {
+        const fragment = document.createDocumentFragment();
+        let lineIndex = 0;
+        let ink;
+        const addLine = () => {
+          const line = document.createElement('span');
+          line.className = 'reveal-line';
+          ink = document.createElement('span');
+          ink.className = 'reveal-line__ink';
+          ink.style.setProperty('--line-delay', `${lineIndex++ * 110}ms`);
+          line.append(ink);
+          fragment.append(line);
+        };
+        addLine();
+        [...element.childNodes].forEach(node => {
+          if (node.nodeName === 'BR') addLine();
+          else ink.append(node);
+        });
+        element.replaceChildren(fragment);
+        element.classList.add('text-reveal');
+        textObserver.observe(element);
+        element.classList.add('is-reveal-ready');
+      });
+      softTargets.forEach(element => {
+        element.classList.add('soft-reveal');
+        textObserver.observe(element);
+        element.classList.add('is-reveal-ready');
+      });
+      document.addEventListener('focusin', event => {
+        event.target.closest?.('.is-reveal-ready')?.classList.add('is-revealed');
+      });
+    } catch { revealCopy(); }
+  }
+
   const foldSection = document.querySelector('.invitation-section');
   const paper = document.querySelector('.paper-fold');
   const printStage = document.querySelector('.print-stage');
   const print = printStage?.querySelector('.moment');
   if (!foldSection || !paper || !printStage || !print) return;
+
+  const story = document.getElementById('promise-story');
+  const stage = story?.querySelector('.promise-stage');
+  const canvas = document.getElementById('promise-canvas');
+  let renderer;
+  let rendererFailed = false;
+  let storyAnimated = false;
+  let storyTop = 0;
+  let storyHeight = 0;
+  let storyTravel = 1;
+  let lastStory = -1;
+  let redrawStory = true;
 
   let enabled = false;
   let frame = 0;
@@ -71,6 +135,39 @@
 
   const clamp = value => Math.min(1, Math.max(0, value));
   const ease = value => value * value * (3 - 2 * value);
+  const phase = (start, end, value) => ease(clamp((value - start) / (end - start)));
+
+  function failStory() {
+    rendererFailed = true;
+    try { renderer?.dispose(); } catch { /* A lost context already released its buffers. */ }
+    renderer = null;
+    storyAnimated = false;
+    story?.classList.remove('is-animated', 'is-rendered');
+    story?.removeAttribute('style');
+    schedule(true);
+  }
+
+  function selectStory() {
+    if (!story || !stage || !canvas) return;
+    story.removeAttribute('style');
+    lastStory = -1;
+    redrawStory = true;
+    const selected = root.dataset.design === 'letter';
+    if (selected && !renderer && !rendererFailed) {
+      try { renderer = window.WeddingRings?.create(canvas); }
+      catch { rendererFailed = true; }
+    }
+    storyAnimated = Boolean(selected && enabled && renderer && window.CSS?.supports?.('overflow', 'clip'));
+    story.classList.toggle('is-animated', storyAnimated);
+    if (selected && renderer) {
+      try {
+        if (!renderer.render(storyAnimated ? 0 : 1)) { failStory(); return; }
+        story.classList.add('is-rendered');
+      } catch { failStory(); }
+    }
+  }
+
+  canvas?.addEventListener('webglcontextlost', failStory);
 
   function update() {
     frame = 0;
@@ -81,7 +178,34 @@
       // Measure untransformed normal-flow parents, never animated surfaces.
       foldTop = foldSection.getBoundingClientRect().top + scrollY;
       printTop = printStage.getBoundingClientRect().top + scrollY;
+      if (story && stage) {
+        storyTop = story.getBoundingClientRect().top + scrollY;
+        storyHeight = story.offsetHeight;
+        storyTravel = Math.max(1, storyHeight - stage.offsetHeight);
+        redrawStory = true;
+      }
       layoutDirty = false;
+    }
+    if (storyAnimated && storyTop - scrollY < viewportHeight && storyTop + storyHeight - scrollY > 0) {
+      const progress = clamp((scrollY - storyTop + 64) / storyTravel);
+      if (redrawStory || Math.abs(progress - lastStory) > .0005) {
+        const headingOut = phase(.13, .40, progress);
+        const startOut = phase(.24, .49, progress);
+        const endIn = phase(.62, .82, progress);
+        story.style.setProperty('--story-heading-opacity', (1 - headingOut).toFixed(3));
+        story.style.setProperty('--story-heading-y', `${(-headingOut * 28).toFixed(1)}px`);
+        story.style.setProperty('--story-start-opacity', (1 - startOut).toFixed(3));
+        story.style.setProperty('--story-start-y', `${(-startOut * 20).toFixed(1)}px`);
+        story.style.setProperty('--story-end-opacity', endIn.toFixed(3));
+        story.style.setProperty('--story-end-y', `${((1 - endIn) * 24).toFixed(1)}px`);
+        story.style.setProperty('--story-hint-opacity', (1 - phase(.04, .22, progress)).toFixed(3));
+        story.style.setProperty('--story-progress', progress.toFixed(4));
+        story.style.setProperty('--story-shadow', (1 + Math.sin(progress * Math.PI) * .2).toFixed(3));
+        try { if (!renderer.render(progress)) failStory(); }
+        catch { failStory(); }
+        lastStory = progress;
+        redrawStory = false;
+      }
     }
     const fold = 1 - ease(clamp((viewportHeight * .9 - (foldTop - scrollY)) / (viewportHeight * .66)));
     const settle = 1 - ease(clamp((viewportHeight * .96 - (printTop - scrollY)) / (viewportHeight * .5)));
@@ -108,12 +232,17 @@
 
   function schedule(measure = false) {
     if (measure) layoutDirty = true;
+    if (!storyAnimated && measure && renderer && root.dataset.design === 'letter' && !document.hidden) {
+      try { if (!renderer.render(1)) failStory(); } catch { failStory(); }
+    }
     if (enabled && !document.hidden && !frame) frame = requestAnimationFrame(update);
   }
 
   function selectMotion() {
     enabled = root.dataset.design === 'letter' && !motion.matches;
     clearMotion();
+    selectStory();
+    if (motion.matches) revealCopy();
     if (enabled) schedule(true);
   }
 
@@ -141,7 +270,7 @@
   });
   if ('ResizeObserver' in window) {
     const observer = new ResizeObserver(() => schedule(true));
-    [document.querySelector('.hero--letter'), foldSection, printStage].forEach(element => {
+    [document.querySelector('.hero--letter'), story, stage, foldSection, printStage].forEach(element => {
       if (element) observer.observe(element);
     });
   }

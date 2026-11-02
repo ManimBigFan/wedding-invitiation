@@ -42,7 +42,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
   <a class="skip-link" href="#invitation">초대의 글로 건너뛰기</a>
@@ -74,7 +74,7 @@
         <p>일요일 오전 11시 30분</p>
         <p class="hero__venue">더채플앳청담</p>
       </div>
-      <a class="scroll-cue" href="#invitation" aria-label="아래로 스크롤하여 초대의 글 보기"><span>당신에게 전하는 초대</span><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1v26M4 19l8 8 8-8"/></svg></a>
+      <a class="scroll-cue" href="#promise-story" aria-label="아래로 스크롤하여 두 사람의 이야기 보기"><span>아래로 펼쳐지는 우리의 이야기</span><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1v26M4 19l8 8 8-8"/></svg></a>
       </div>
       <div class="sleeve-edge" aria-hidden="true"></div>
     </header>
@@ -96,6 +96,34 @@
       <span class="blind-emboss" aria-hidden="true">&amp;</span>
       <div class="emboss-bottom"><p class="hero__names">이기훈 <span>·</span> 한승미</p><div class="hero__details"><p class="hero__date">2027. 03. 28.</p><p>일요일 오전 11시 30분</p><p class="hero__venue">더채플앳청담</p></div><a class="button button--outline" href="#invitation">초대의 글 <span aria-hidden="true">↓</span></a></div>
     </header>
+
+    <section class="promise-story" id="promise-story" aria-labelledby="promise-title">
+      <div class="promise-stage">
+        <div class="promise-heading">
+          <p class="eyebrow">THE PROMISE</p>
+          <h2 id="promise-title">서로의 하루가,<br><em>하나의 약속으로.</em></h2>
+        </div>
+        <div class="promise-art" aria-hidden="true">
+          <span class="promise-ground"></span>
+          <svg class="promise-fallback" viewBox="0 0 440 420">
+            <defs>
+              <linearGradient id="band-gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8c6b39"/><stop offset=".27" stop-color="#e6d6ad"/><stop offset=".48" stop-color="#fbf2d6"/><stop offset=".68" stop-color="#b39158"/><stop offset="1" stop-color="#e5d3a9"/></linearGradient>
+            </defs>
+            <ellipse cx="177" cy="196" rx="80" ry="104" transform="rotate(-32 177 196)" fill="none" stroke="#9e7e4d" stroke-width="25"/>
+            <ellipse cx="177" cy="192" rx="80" ry="104" transform="rotate(-32 177 192)" fill="none" stroke="url(#band-gold)" stroke-width="21"/>
+            <ellipse cx="270" cy="240" rx="79" ry="101" transform="rotate(37 270 240)" fill="none" stroke="#9e7e4d" stroke-width="24"/>
+            <ellipse cx="270" cy="235" rx="79" ry="101" transform="rotate(37 270 235)" fill="none" stroke="url(#band-gold)" stroke-width="20"/>
+          </svg>
+          <canvas id="promise-canvas"></canvas>
+        </div>
+        <div class="promise-caption">
+          <p class="promise-caption__start">서로 다른 날들을 지나</p>
+          <p class="promise-caption__end">이제, 같은 내일을<br>약속합니다.</p>
+        </div>
+        <p class="promise-scroll" aria-hidden="true">우리의 이야기를 따라 <span>↓</span></p>
+        <div class="promise-progress" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
 
     <section class="section invitation-section" id="invitation" aria-labelledby="invitation-title">
       <div class="paper-fold">
@@ -224,9 +252,10 @@
     </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js?v=6"></script>
-  <script src="config.js?v=6"></script>
-  <script src="guest-upload.js?v=6"></script>
-  <script src="interactions.js?v=6"></script>
+  <script src="script.js?v=7"></script>
+  <script src="config.js?v=7"></script>
+  <script src="guest-upload.js?v=7"></script>
+  <script src="rings.js?v=7"></script>
+  <script src="interactions.js?v=7"></script>
 </body>
 </html>
