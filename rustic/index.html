@@ -20,23 +20,29 @@
       if (introRoot.dataset.design === 'letter' && (!location.hash || location.hash === '#top') &&
           !matchMedia('(prefers-reduced-motion: reduce)').matches && introNavigation?.type !== 'back_forward') {
         introRoot.setAttribute('data-auto-envelope', '');
-        window.__weddingEnvelopeIntro = { timer: null };
-        document.addEventListener('DOMContentLoaded', function () {
-          var introState = window.__weddingEnvelopeIntro;
-          if (!introState || !introRoot.hasAttribute('data-auto-envelope')) return;
-          introState.timer = setTimeout(function () {
-            if (window.__weddingEnvelopeIntro !== introState) return;
-            introRoot.removeAttribute('data-auto-envelope');
-            delete window.__weddingEnvelopeIntro;
-          }, 1900);
-        }, { once: true });
+        var introState = { timer: null, started: performance.now(), listeners: [] };
+        introState.cancel = function () {
+          clearTimeout(introState.timer);
+          introRoot.removeAttribute('data-auto-envelope');
+          introState.listeners.forEach(function (item) { window.removeEventListener(item[0], introState.cancel, item[1]); });
+          introState.listeners = [];
+          if (window.__weddingEnvelopeIntro === introState) delete window.__weddingEnvelopeIntro;
+        };
+        window.__weddingEnvelopeIntro = introState;
+        ['pointerdown', 'touchstart', 'wheel', 'scroll', 'keydown'].forEach(function (type) {
+          var options = { passive: true, capture: true };
+          window.addEventListener(type, introState.cancel, options);
+          introState.listeners.push([type, options]);
+        });
+        // A slow stylesheet or a failed enhancement can never hold the cover closed.
+        introState.timer = setTimeout(introState.cancel, 1900);
       }
     } catch (error) { document.documentElement.removeAttribute('data-auto-envelope'); }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <a class="skip-link" href="#invitation">초대의 글로 건너뛰기</a>
@@ -50,18 +56,11 @@
   <main class="invitation-page" id="top">
     <header class="hero hero--letter" aria-labelledby="letter-title">
       <div class="envelope-intro" aria-hidden="true">
-        <p class="eyebrow">A LETTER FOR YOU</p>
-        <p class="envelope-greeting">당신에게<br>전하고 싶은 소식</p>
-        <div class="envelope-visual">
-          <div class="envelope-model">
-            <span class="envelope-back"></span>
-            <span class="envelope-paper"><span>THE WEDDING OF</span><strong>이기훈 · 한승미</strong><small>2027. 03. 28.</small></span>
-            <span class="envelope-front"></span>
-            <span class="envelope-flap"></span>
-          </div>
-        </div>
+        <p class="eyebrow envelope-caption">A LETTER FOR YOU</p>
+        <span class="envelope-back"></span>
+        <span class="envelope-front"></span>
+        <span class="envelope-flap"></span>
         <p class="envelope-from">이기훈 · 한승미 드림</p>
-        <p class="envelope-when">2027. 03. 28. · 오전 11시 30분</p>
       </div>
       <div class="letter-card">
       <p class="eyebrow hero__eyebrow">THE WEDDING OF</p>
@@ -99,20 +98,28 @@
     </header>
 
     <section class="section invitation-section" id="invitation" aria-labelledby="invitation-title">
+      <div class="paper-fold">
+      <div class="paper-panel paper-panel--upper">
       <p class="eyebrow">A LETTER TO YOU</p>
       <h2 id="invitation-title">소중한 당신을<br>초대합니다</h2>
       <span class="small-ampersand" aria-hidden="true">&amp;</span>
+      </div>
+      <div class="paper-panel paper-panel--lower">
       <p class="invitation-copy">서로의 하루를 가장 가까이에서 바라보며<br>평생을 함께 걷기로 약속했습니다.</p>
       <p class="invitation-copy">저희의 새로운 시작을 축복해 주시면<br>더없는 기쁨으로 간직하겠습니다.</p>
       <p class="signature">이기훈 · 한승미 <span>드림</span></p>
+      </div>
+      </div>
     </section>
 
     <section class="section moments-section" aria-labelledby="moments-title">
       <div class="section-heading"><p class="eyebrow">OUR MOMENT</p><h2 id="moments-title">우리의 한 장면</h2></div>
+      <div class="print-stage">
       <figure class="moment">
         <button class="moment__open" type="button" id="open-photo" data-open-photo aria-label="우리의 사진 크게 보기"><img src="../assets/our-moment.jpg" alt="함께 누워 손을 뻗으며 웃는 기훈과 승미" width="1536" height="1152" loading="lazy"><span class="moment__expand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></svg></span></button>
         <figcaption><span>Ordinary days, extraordinary love.</span><span>01</span></figcaption>
       </figure>
+      </div>
       <p class="moment-note">가장 평범한 날에도,<br>가장 특별한 우리로.</p>
     </section>
 
@@ -217,9 +224,9 @@
     </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js?v=5"></script>
-  <script src="config.js?v=5"></script>
-  <script src="guest-upload.js?v=5"></script>
-  <script src="interactions.js?v=5"></script>
+  <script src="script.js?v=6"></script>
+  <script src="config.js?v=6"></script>
+  <script src="guest-upload.js?v=6"></script>
+  <script src="interactions.js?v=6"></script>
 </body>
 </html>

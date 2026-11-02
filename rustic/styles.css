@@ -14,43 +14,54 @@
 
 .design-switcher a[aria-current="page"],.design-switcher a[aria-current="page"]:hover{background:var(--ink);color:var(--paper-light)}
 
-/* The paper envelope opens on its own and never intercepts input. */
-.letter-card{display:flex;flex-direction:column;align-items:center;width:100%}
-.envelope-intro{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;padding:42px 27px;z-index:4;pointer-events:none;user-select:none}
-.envelope-greeting{font-size:23px;font-weight:400;line-height:1.8;letter-spacing:.7px;margin:20px 0 18px}
-.envelope-visual{display:block;width:min(300px,100%);perspective:1000px}
-.envelope-model{position:relative;display:block;height:230px;perspective:1000px;isolation:isolate}
-.envelope-back{position:absolute;inset:50px 0 0;background:#dcd3c1;box-shadow:0 12px 28px #67583e18,0 1px 2px #6b5c432e;border-radius:2px}
-.envelope-paper{position:absolute;inset:60px 15px 14px;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;background:#faf7ef;border:1px solid #fffaf0;box-shadow:0 -2px 6px #7563480a}
-.envelope-paper>span{font-family:var(--english);font-size:9px;letter-spacing:2px}
-.envelope-paper strong{font-size:19px;font-weight:400;letter-spacing:3px}
-.envelope-paper small{font-family:var(--english);font-size:13px;letter-spacing:2px}
-.envelope-front{position:absolute;inset:50px 0 0;z-index:3;background:linear-gradient(145deg,#f5f0e4,#e8dfcf);clip-path:polygon(0 0,50% 49%,100% 0,100% 100%,0 100%);border:1px solid #d9cfbd;border-radius:2px}
+/* One sheet leaves its envelope and becomes the cover itself. */
+.letter-card{display:flex;flex-direction:column;align-items:center;width:100%;position:relative;z-index:1}
+.envelope-intro{display:none;pointer-events:none;user-select:none}
+.envelope-intro>*{position:absolute;pointer-events:none}
+.envelope-back,.envelope-front,.envelope-flap{width:min(300px,calc(100% - 54px));left:50%;margin-left:max(-150px,calc((54px - 100%)/2));top:calc(50% - 12px)}
+.envelope-back{height:180px;z-index:0;background:#ded6c6;border-radius:2px;box-shadow:0 14px 29px #67583e20,0 1px 2px #6b5c432e}
+.envelope-front{height:180px;z-index:4;background:linear-gradient(145deg,#f5f0e4,#e8dfcf);clip-path:polygon(0 0,50% 49%,100% 0,100% 100%,0 100%);border:1px solid #d9cfbd;border-radius:2px}
 .envelope-front::after{content:"";position:absolute;inset:0;background:linear-gradient(31deg,transparent 49.6%,#c7bba34d 50%,transparent 50.6%),linear-gradient(-31deg,transparent 49.6%,#c7bba34d 50%,transparent 50.6%);opacity:.7}
-.envelope-flap{position:absolute;left:0;right:0;top:50px;height:114px;z-index:4;transform-origin:top center;backface-visibility:hidden;clip-path:polygon(0 0,100% 0,50% 100%);background:linear-gradient(#eee7d8,#e4dac8);filter:drop-shadow(0 1px 1px #89795933)}
-.envelope-from{font-size:12px;letter-spacing:1.6px;margin-top:25px}
-.envelope-when{font-size:10px;color:var(--muted);margin-top:10px}
-[data-design=letter][data-auto-envelope] .envelope-intro{display:flex;animation:envelope-intro-away .28s 1.08s ease both}
-[data-design=letter][data-auto-envelope] .envelope-flap{animation:envelope-flap-open .44s .38s cubic-bezier(.4,0,.2,1) both}
-[data-design=letter][data-auto-envelope] .envelope-paper{animation:envelope-letter-lift .55s .64s cubic-bezier(.22,1,.36,1) both}
-[data-design=letter][data-auto-envelope] .letter-card{animation:letter-arrive .43s 1.24s cubic-bezier(.22,1,.36,1) both}
-@keyframes envelope-flap-open{to{transform:rotateX(178deg)}}
-@keyframes envelope-letter-lift{to{transform:translateY(-88px) rotate(-2deg)}}
-@keyframes envelope-intro-away{to{opacity:0;transform:translateY(12px)}}
-@keyframes letter-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@media(max-width:359px){.envelope-model{height:210px}.envelope-flap{height:103px}.envelope-greeting{font-size:21px}}
-@media(prefers-reduced-motion:reduce){[data-auto-envelope] .envelope-intro{display:none!important}[data-auto-envelope] .letter-card{opacity:1!important;transform:none!important}}
+.envelope-flap{height:114px;z-index:5;transform-origin:top center;backface-visibility:hidden;clip-path:polygon(0 0,100% 0,50% 100%);background:linear-gradient(#eee7d8,#e4dac8);filter:drop-shadow(0 1px 1px #89795933)}
+.envelope-caption,.envelope-from{left:24px;right:24px;z-index:5;text-align:center}
+.envelope-caption{top:calc(50% - 148px);font-size:10px;letter-spacing:2.8px}
+.envelope-from{top:calc(50% + 204px);font-size:12px;letter-spacing:1.6px}
+[data-design=letter][data-auto-envelope] .hero--letter{perspective:1100px;isolation:isolate}
+[data-design=letter][data-auto-envelope] .envelope-intro{display:contents}
+[data-design=letter][data-auto-envelope] .letter-card{transform-origin:50% 50%;background:var(--paper);animation:paper-from-envelope 1.65s cubic-bezier(.22,1,.36,1) both}
+[data-design=letter][data-auto-envelope] .envelope-flap{animation:envelope-open-and-leave 1.65s ease both}
+[data-design=letter][data-auto-envelope] .envelope-front,[data-design=letter][data-auto-envelope] .envelope-back{animation:envelope-shell-leave .64s .93s cubic-bezier(.4,0,.2,1) both}
+[data-design=letter][data-auto-envelope] .envelope-caption,[data-design=letter][data-auto-envelope] .envelope-from{animation:envelope-caption-leave .3s .39s ease both}
+[data-design=letter][data-auto-envelope] .sleeve-edge{animation:cover-sleeve-arrive .25s 1.4s ease both}
+@keyframes paper-from-envelope{0%,18%{transform:translateY(128px) scale(.57);clip-path:inset(0 0 48%);box-shadow:0 5px 22px #67583e24}48%{transform:translateY(-62px) scale(.57);clip-path:inset(0 0 28%);box-shadow:0 7px 22px #67583e24}64%{transform:translateY(-42px) scale(.66);clip-path:inset(0);box-shadow:0 9px 26px #67583e1c}100%{transform:none;clip-path:inset(0);box-shadow:0 0 0 #67583e00}}
+@keyframes envelope-open-and-leave{0%,12%{transform:rotateX(0);opacity:1}42%,56%{transform:rotateX(175deg);opacity:1}96%,100%{transform:translateY(225px) rotateX(175deg);opacity:0}}
+@keyframes envelope-shell-leave{0%{transform:translateY(0);opacity:1}70%{opacity:.8}100%{transform:translateY(225px);opacity:0}}
+@keyframes envelope-caption-leave{to{opacity:0;transform:translateY(5px)}}
+@keyframes cover-sleeve-arrive{from{opacity:0}to{opacity:1}}
 
-/* Passive scroll motion for the rest of the invitation. */
+/* A crease responds to the ordinary page scroll; all text keeps its flow. */
+.paper-fold,.paper-panel{display:contents}
+.print-stage{position:relative}
+[data-design=letter] .invitation-section{padding:64px 22px 72px;perspective:1100px}
+[data-design=letter] .paper-fold{display:block;position:relative;perspective:1100px;isolation:isolate}
+[data-design=letter] .paper-panel{display:block;position:relative;background:var(--paper-light);border-left:1px solid #d7cebd66;border-right:1px solid #d7cebd66;backface-visibility:hidden}
+[data-design=letter] .paper-panel--upper{padding:43px 16px 7px;border-top:1px solid #fffdf7;transform-origin:center bottom;transform:rotateX(var(--fold-upper,0deg));box-shadow:0 -3px 13px #8a765d05}
+[data-design=letter] .paper-panel--lower{padding:30px 16px 40px;border-bottom:1px solid #c6baa54d;transform-origin:center top;transform:rotateX(var(--fold-lower,0deg));box-shadow:0 var(--fold-shadow-y,4px) var(--fold-shadow-blur,12px) rgba(85,64,38,var(--fold-shadow-opacity,.05))}
+[data-design=letter] .paper-panel--upper::after{content:"";position:absolute;left:0;right:0;bottom:0;height:32px;pointer-events:none;background:linear-gradient(transparent,#786346);opacity:var(--fold-shade,.035)}
+[data-design=letter] .paper-panel--lower::before{content:"";position:absolute;left:0;right:0;top:0;height:24px;pointer-events:none;border-top:1px solid #b9ab9345;box-shadow:inset 0 1px #fffdf8;background:linear-gradient(#b4a58e26,transparent);opacity:var(--crease-opacity,.35)}
+[data-design=letter] .paper-panel--upper .small-ampersand{margin-bottom:18px}
+[data-design=letter] .print-stage{perspective:1000px}
+[data-design=letter] .moment{transform:translate3d(0,var(--print-y,0px),0) rotate(var(--print-rotation,0deg));transform-origin:50% 65%}
+[data-design=letter] .moment__open{box-shadow:0 var(--print-shadow-y,3px) var(--print-shadow-blur,8px) rgba(85,64,38,var(--print-shadow-opacity,.06))}
 [hidden]{display:none!important}
-[data-design=letter] .reveal-ready{transition:opacity .7s ease var(--reveal-delay,0ms),transform .7s cubic-bezier(.22,1,.36,1) var(--reveal-delay,0ms)}
-[data-design=letter] .reveal-ready:not(.is-revealed):not(:focus-within){opacity:0;transform:translateY(18px)}
+@media(max-width:359px){[data-design=letter] .invitation-section{padding-left:15px;padding-right:15px}[data-design=letter] .paper-panel--upper,[data-design=letter] .paper-panel--lower{padding-left:13px;padding-right:13px}.envelope-front,.envelope-back{height:168px}.envelope-flap{height:106px}.envelope-from{top:calc(50% + 191px)}}
+@media(prefers-reduced-motion:reduce){[data-auto-envelope] .envelope-intro{display:none!important}[data-auto-envelope] .letter-card{opacity:1!important;transform:none!important;clip-path:none!important;box-shadow:none!important}[data-design=letter] .paper-panel,[data-design=letter] .moment{transform:none!important}[data-design=letter] .paper-panel--upper::after{opacity:.035!important}[data-design=letter] .paper-panel--lower::before{opacity:.35!important}}
+
 .photo-dialog__color{display:none;align-items:center;justify-content:center;margin:20px auto 0;min-height:44px;min-width:148px;padding:9px 18px;border:1px solid #d8ccba80;border-radius:2px;color:#fbf5e9;background:#ffffff0a;font-size:12px}
 [data-design=letter] .photo-dialog__color{display:flex}
 [data-design=letter] .photo-dialog[data-monochrome=true]>img{filter:grayscale(1) sepia(.12)}
 .photo-dialog>img{transition:filter .5s ease}
 .photo-dialog__color[aria-pressed="true"]{background:#f4f1e9;color:#4b443a;border-color:#f4f1e9}
-@media(prefers-reduced-motion:reduce){[data-design=letter] .reveal-ready{opacity:1!important;transform:none!important}}
 
 /* A small paper keepsake for photographs from our guests. */
 .guest-photo-section{background:var(--paper-light);padding-top:76px;padding-bottom:62px}
