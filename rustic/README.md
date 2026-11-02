@@ -39,7 +39,7 @@ G&S 같은 이니셜·모노그램 장식은 사용하지 않습니다. 봉투�
 
 우선 `window.WeddingRings.create(canvas)`로 WebGL 렌더러를 만들고, 사용할 수 없으면 별도 캔버스에 `window.WeddingRingsFallback.create(canvas)`를 적용합니다. 두 함수는 같은 계약으로 `{ render, dispose }` 또는 `null`을 반환합니다. `render(progress)`는 0~1 진행률을 받고 성공 여부를 반환하며, `dispose()`는 해당 렌더러 자원을 해제합니다. WebGL의 `false` 반환·컨텍스트 손실은 Canvas 2D로 전환하고, 두 렌더러가 모두 실패하면 SVG 대체 그림을 표시합니다.
 
-WebGL은 `#promise-canvas`, 소프트웨어 렌더러는 `#promise-software`를 사용합니다. 활성 렌더러는 장면의 `data-renderer="webgl"` 또는 `data-renderer="canvas"`로 구분합니다. 소프트웨어 방식도 3D 정점 회전·원근 투영·면의 깊이 순서와 명암을 계산합니다. 두 렌더러 모두 별도 모델 파일이나 외부 3D 의존성이 없으며, 현재 HTML의 정적 자산 캐시 식별자는 `v=8`입니다.
+WebGL은 `#promise-canvas`, 소프트웨어 렌더러는 `#promise-software`를 사용합니다. 활성 렌더러는 장면의 `data-renderer="webgl"` 또는 `data-renderer="canvas"`로 구분합니다. 소프트웨어 방식도 3D 정점 회전·원근 투영·면의 깊이 순서와 명암을 계산합니다. 두 렌더러 모두 별도 모델 파일이나 외부 3D 의존성이 없으며, 현재 HTML의 정적 자산 캐시 식별자는 `v=9`입니다.
 
 스크롤 시간과 화면 상태는 `interactions.js`가 관리합니다. 스크롤을 막지 않는 이벤트 리스너와 필요한 프레임만 갱신하는 방식이며, 화면이 정지했을 때 반복 렌더링 루프를 돌리지 않습니다. WebGL 미지원·컨텍스트 손실에서 Canvas 2D로 전환되는지, 두 렌더러의 실패·움직임 줄이기·CSS 기능 미지원에서 정적으로 표시되는지, 2·3안 전환이 정상인지 수정 후 함께 확인하세요. 실제 기기 성능과 최종 배포 여부는 별도 검증이 필요합니다.
 

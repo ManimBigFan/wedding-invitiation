@@ -34,21 +34,26 @@
       (1 - between(y, 1 - box.feather, 1 + box.feather));
   }
 
-  function shade(position, normal, inner, gold, colors, offset) {
-    const view = normalize([-position[0], -position[1], 6.9 - position[2]]);
-    const facing = Math.max(0, dot(normal, view));
-    const reflection = [2 * facing * normal[0] - view[0], 2 * facing * normal[1] - view[1], 2 * facing * normal[2] - view[2]];
+  const reflection = new Float32Array(3);
+  const lowEnvironment = [.105, .085, .06], highEnvironment = [.67, .64, .57];
+  const keyColor = [2.4, 2.28, 2.04], ceilingColor = [1.25, 1.2, 1.08], edgeColor = [1.55, 1.45, 1.23];
+
+  function shade(x, y, z, nx, ny, nz, inner, gold, colors, offset) {
+    const inverse = 1 / Math.hypot(x, y, 6.9 - z);
+    const vx = -x * inverse, vy = -y * inverse, vz = (6.9 - z) * inverse;
+    const facing = Math.max(0, nx * vx + ny * vy + nz * vz);
+    reflection[0] = 2 * facing * nx - vx;
+    reflection[1] = 2 * facing * ny - vy;
+    reflection[2] = 2 * facing * nz - vz;
     const sky = between(reflection[1], -.65, .85);
     const dark = 1 - boxReflection(reflection, boxes[0]) * .72;
     const key = boxReflection(reflection, boxes[1]);
     const ceiling = boxReflection(reflection, boxes[2]);
     const edge = boxReflection(reflection, boxes[3]);
     const fresnel = Math.pow(1 - facing, 5);
-    const diffuse = Math.max(0, dot(normal, keyDirection));
-    const low = [.105, .085, .06], high = [.67, .64, .57];
-    const keyColor = [2.4, 2.28, 2.04], ceilingColor = [1.25, 1.2, 1.08], edgeColor = [1.55, 1.45, 1.23];
+    const diffuse = Math.max(0, nx * keyDirection[0] + ny * keyDirection[1] + nz * keyDirection[2]);
     for (let channel = 0; channel < 3; channel++) {
-      const environment = mix(low[channel], high[channel], sky) * dark + keyColor[channel] * key + ceilingColor[channel] * ceiling + edgeColor[channel] * edge;
+      const environment = mix(lowEnvironment[channel], highEnvironment[channel], sky) * dark + keyColor[channel] * key + ceilingColor[channel] * ceiling + edgeColor[channel] * edge;
       let value = environment * (gold[channel] + (1 - gold[channel]) * fresnel) + gold[channel] * (.075 + diffuse * .13);
       value *= 1 - inner * .18;
       value /= 1 + value * .48;
@@ -57,7 +62,7 @@
   }
 
   function band(major, radial, halfWidth, gold) {
-    const around = 64, across = 12, count = around * across;
+    const around = 80, across = 16, count = around * across;
     const local = new Float32Array(count * 3), normals = new Float32Array(count * 3);
     const inner = new Float32Array(count), faces = [];
     const profile = angle => [radial * power(Math.cos(angle)), halfWidth * power(Math.sin(angle))];
@@ -98,14 +103,16 @@
         const X = (r[0] * x + r[3] * y + r[6] * z) * scale + translation[0];
         const Y = (r[1] * x + r[4] * y + r[7] * z) * scale + translation[1];
         const Z = (r[2] * x + r[5] * y + r[8] * z) * scale + translation[2];
-        mesh.world.set([X, Y, Z], offset);
+        mesh.world[offset] = X; mesh.world[offset + 1] = Y; mesh.world[offset + 2] = Z;
         const depth = 6.9 - Z, index = offset / 3;
         mesh.screen[index * 2] = width / 2 + X * focal / depth;
         mesh.screen[index * 2 + 1] = height / 2 - Y * focal / depth;
         const nx = mesh.normals[offset], ny = mesh.normals[offset + 1], nz = mesh.normals[offset + 2];
-        const normal = [r[0] * nx + r[3] * ny + r[6] * nz, r[1] * nx + r[4] * ny + r[7] * nz, r[2] * nx + r[5] * ny + r[8] * nz];
-        mesh.worldNormals.set(normal, offset);
-        shade([X, Y, Z], normal, mesh.inner[index], mesh.gold, mesh.colors, offset);
+        const NX = r[0] * nx + r[3] * ny + r[6] * nz;
+        const NY = r[1] * nx + r[4] * ny + r[7] * nz;
+        const NZ = r[2] * nx + r[5] * ny + r[8] * nz;
+        mesh.worldNormals[offset] = NX; mesh.worldNormals[offset + 1] = NY; mesh.worldNormals[offset + 2] = NZ;
+        shade(X, Y, Z, NX, NY, NZ, mesh.inner[index], mesh.gold, mesh.colors, offset);
       }
       for (const face of mesh.faces) {
         let x = 0, y = 0, z = 0, nx = 0, ny = 0, nz = 0;
@@ -128,20 +135,37 @@
       for (let i = 1; i < 4; i++) context.lineTo(screen[face[i] * 2], screen[face[i] * 2 + 1]);
       context.closePath();
       let darkest = face[0], brightest = face[0], min = Infinity, max = -Infinity;
-      let red = 0, green = 0, blue = 0;
+      let red = 0, green = 0, blue = 0, centerX = 0, centerY = 0, averageLight = 0;
       for (const index of face) {
         const offset = index * 3;
         const luminance = colors[offset] * .2126 + colors[offset + 1] * .7152 + colors[offset + 2] * .0722;
         if (luminance < min) { min = luminance; darkest = index; }
         if (luminance > max) { max = luminance; brightest = index; }
         red += colors[offset]; green += colors[offset + 1]; blue += colors[offset + 2];
+        centerX += screen[index * 2]; centerY += screen[index * 2 + 1]; averageLight += luminance;
       }
       let fill = `rgb(${Math.round(red / 4)},${Math.round(green / 4)},${Math.round(blue / 4)})`;
-      const dx = screen[brightest * 2] - screen[darkest * 2], dy = screen[brightest * 2 + 1] - screen[darkest * 2 + 1];
-      if (max - min > 9 && dx * dx + dy * dy > .3) {
-        fill = context.createLinearGradient(screen[darkest * 2], screen[darkest * 2 + 1], screen[brightest * 2], screen[brightest * 2 + 1]);
-        fill.addColorStop(0, rgb(colors, darkest));
-        fill.addColorStop(1, rgb(colors, brightest));
+      // Fit one continuous light gradient to all four corners. This avoids a
+      // separate bright/dark tile pattern on a smoothly polished metal surface.
+      centerX /= 4; centerY /= 4; averageLight /= 4;
+      let xx = 0, yy = 0, xy = 0, xl = 0, yl = 0;
+      for (const index of face) {
+        const x = screen[index * 2] - centerX, y = screen[index * 2 + 1] - centerY;
+        const offset = index * 3;
+        const light = colors[offset] * .2126 + colors[offset + 1] * .7152 + colors[offset + 2] * .0722 - averageLight;
+        xx += x * x; yy += y * y; xy += x * y; xl += x * light; yl += y * light;
+      }
+      const determinant = xx * yy - xy * xy;
+      if (max - min > 7 && determinant > .01) {
+        const gx = (xl * yy - yl * xy) / determinant;
+        const gy = (yl * xx - xl * xy) / determinant;
+        const magnitude = gx * gx + gy * gy;
+        if (magnitude > .001) {
+          const low = (min - averageLight) / magnitude, high = (max - averageLight) / magnitude;
+          fill = context.createLinearGradient(centerX + gx * low, centerY + gy * low, centerX + gx * high, centerY + gy * high);
+          fill.addColorStop(0, rgb(colors, darkest));
+          fill.addColorStop(1, rgb(colors, brightest));
+        }
       }
       context.fillStyle = fill;
       context.strokeStyle = fill;
