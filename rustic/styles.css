@@ -14,6 +14,22 @@
 
 .design-switcher a[aria-current="page"],.design-switcher a[aria-current="page"]:hover{background:var(--ink);color:var(--paper-light)}
 
+/* The photograph is a keepsake stamp carrying this invitation to its reader. */
+.keepsake-postage{position:relative;width:248px;max-width:100%;display:flex;flex-direction:column;align-items:center}
+.keepsake-postage .hero__stamp{padding:11px 12px 10px;transform:rotate(-4deg);border:1px solid #d7ccba}
+.postage__issue{display:block;margin-bottom:7px;font-family:var(--english);font-size:7px;letter-spacing:1.5px;line-height:1.6}
+.keepsake-postage .postage__caption{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-top:8px;text-align:left;font-size:8px;line-height:1.5;letter-spacing:.9px}
+.postage__caption small{display:block;font-family:var(--serif);font-size:7px;font-weight:400;letter-spacing:.6px;margin-top:2px}
+.postage__caption strong{font-family:var(--english);font-size:21px;font-weight:500;line-height:1;text-align:right;letter-spacing:.2px}
+.postage__caption strong small{font-family:var(--english);font-size:8px;letter-spacing:2px;margin-top:4px}
+.postage-cancellation{position:absolute;top:163px;right:0;width:116px;height:auto;overflow:visible;pointer-events:none;color:#766550;opacity:.7;stroke-width:.9}
+.postage-cancellation text,.postal-postmark text{fill:currentColor;stroke:none;font-family:var(--english);font-size:7px;letter-spacing:1px;text-anchor:middle}
+.postage-cancellation .postage-cancellation__date,.postal-postmark .postage-cancellation__date{font-size:7.5px;letter-spacing:0}
+.postage-dedication{margin-top:29px;font-size:11px;line-height:2;letter-spacing:.5px;color:var(--muted)}
+.hero--letter .hero__eyebrow{margin-bottom:26px}
+.hero--letter .hero__names{margin-top:23px}
+.hero--letter .scroll-cue{margin-top:29px}
+
 /* One sheet leaves its envelope and becomes the cover itself. */
 .letter-card{display:flex;flex-direction:column;align-items:center;width:100%;position:relative;z-index:1}
 .envelope-intro{display:none;pointer-events:none;user-select:none}
@@ -105,15 +121,15 @@
 .letter-story.is-animated .postal-back{z-index:2;background:#d9cfbd;border:1px solid #ccbea6;box-shadow:0 12px 30px #78644924}
 .letter-story.is-animated .postal-cover{z-index:5;background:linear-gradient(135deg,#f5eedf,#e9decb);border:1px solid #fff8e9;clip-path:polygon(0 0,42% 0,50% 6%,58% 0,100% 0,100% 100%,0 100%);text-align:left}
 .postal-cover::before{content:"";position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(32deg,transparent 49.5%,#c2af9033 50%,transparent 50.5%),linear-gradient(-32deg,transparent 49.5%,#c2af9033 50%,transparent 50.5%);pointer-events:none}
-.postal-cover__edition{position:absolute;top:18px;left:18px;right:82px;font-family:var(--english);font-size:7px;letter-spacing:1.3px;line-height:1.7}
-.postal-love-stamp{position:absolute;top:15px;right:18px;width:43px;height:52px;border:1px dashed #a79373;background:#f8f1e3;text-align:center;outline:3px solid #f8f1e3}
-.postal-love-stamp>span{display:block;font-family:var(--english);font-size:28px;line-height:1.2;color:#998264}
-.postal-love-stamp>small{font-family:var(--english);font-size:5px;letter-spacing:1px}
+.postal-cover__edition{position:absolute;top:18px;left:18px;right:82px;font-family:var(--english),var(--serif);font-size:7px;letter-spacing:1.1px;line-height:2}
+.postal-love-stamp{position:absolute;top:15px;right:18px;width:49px;height:61px;padding:4px;border:1px dashed #a79373;background:#f8f1e3;text-align:center;outline:2px solid #f8f1e3}
+.postal-love-stamp>img{display:block;width:100%;height:40px;object-fit:cover;object-position:55% 75%;filter:grayscale(1) sepia(.15);border:1px solid #ab9b8066}
+.postal-love-stamp>small{display:block;font-family:var(--english);font-size:5px;letter-spacing:.35px;margin-top:3px;line-height:1.2}
 .postal-addressee{position:absolute;top:37%;left:23px;right:83px;line-height:1.7}
 .postal-addressee>small{display:block;font-size:8px;letter-spacing:1px;color:#8b775b}
 .postal-addressee>strong{display:block;font-weight:400;font-size:20px;letter-spacing:.5px;margin-top:5px}
-.postal-postmark{position:absolute;top:38%;right:25px;width:50px;height:50px;border:1px solid #8c78575e;border-radius:50%;font-family:var(--english);font-size:6px;letter-spacing:.8px;text-align:center;line-height:1.3;padding-top:5px;color:#897253;transform:rotate(12deg)}
-.postal-postmark>em{display:block;font-size:18px;font-style:normal;line-height:1.15}
+.postal-postmark{position:absolute;top:49px;right:6px;width:104px;height:56px;overflow:visible;color:#806a4b;stroke-width:1.1;transform:rotate(-12deg);pointer-events:none;opacity:.8}
+.letter-story.is-animated .postal-postmark{opacity:var(--postmark-opacity,0);transform:rotate(-12deg) scale(var(--postmark-scale,1.4));transform-origin:60% 50%}
 .postal-sender{position:absolute;left:23px;bottom:18px;font-size:8px;letter-spacing:.8px}
 .letter-story.is-animated .letter-story__copy{position:absolute;left:15px;right:15px;bottom:62px;margin:0;font-size:18px}
 .letter-story.is-animated .story-line--one>span{opacity:var(--line-one-opacity,0);transform:translateY(var(--line-one-y,110%))}

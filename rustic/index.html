@@ -42,7 +42,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="styles.css?v=11">
 </head>
 <body>
   <a class="skip-link" href="#invitation">초대의 글로 건너뛰기</a>
@@ -64,10 +64,21 @@
       </div>
       <div class="letter-card">
       <p class="eyebrow hero__eyebrow">THE WEDDING OF</p>
-      <div class="postage hero__stamp">
-        <img src="../assets/our-moment.jpg" alt="함께 누워 웃고 있는 기훈과 승미" width="1536" height="1152" fetchpriority="high">
-        <span class="postage__caption">OUR LITTLE FOREVER</span>
-      </div>
+      <figure class="keepsake-postage">
+        <div class="postage hero__stamp">
+          <span class="postage__issue">THE WEDDING POST</span>
+          <img src="../assets/our-moment.jpg" alt="우리의 결혼 소식을 전하는 사진 우표. 함께 웃고 있는 기훈과 승미" width="1536" height="1152" fetchpriority="high">
+          <span class="postage__caption"><span>WITH LOVE<br><small>기훈 · 승미</small></span><strong>03.28<small>2027</small></strong></span>
+        </div>
+        <svg class="postage-cancellation" viewBox="0 0 160 86" aria-hidden="true">
+          <g transform="rotate(-12 81 43)">
+            <circle cx="43" cy="43" r="35"/><circle cx="43" cy="43" r="30"/>
+            <path d="M21 35h44M21 51h44M77 29c13-11 26 11 39 0s26 11 39 0M77 39c13-11 26 11 39 0s26 11 39 0M77 49c13-11 26 11 39 0s26 11 39 0M77 59c13-11 26 11 39 0s26 11 39 0"/>
+            <text x="43" y="27">SEOUL</text><text class="postage-cancellation__date" x="43" y="46">2027.03.28</text><text x="43" y="64">WITH LOVE</text>
+          </g>
+        </svg>
+        <figcaption class="postage-dedication">우리의 한 장면을 담아<br>소중한 당신께 보냅니다.</figcaption>
+      </figure>
       <h1 class="hero__names" id="letter-title">이기훈 <span>·</span> 한승미</h1>
       <div class="hero__details">
         <p class="hero__date">2027. 03. 28.</p>
@@ -101,7 +112,7 @@
       <div class="letter-stage">
         <div class="letter-story__heading">
           <p class="eyebrow">A LETTER, FOR YOU</p>
-          <h2 id="promise-title">당신에게 도착한<br>우리의 이야기.</h2>
+          <h2 id="promise-title">마음을 담아,<br>당신께 보냅니다.</h2>
         </div>
         <div class="letter-story__art">
           <div class="postal-grid" aria-hidden="true"><span>TO OUR DEAREST</span><span>SEOUL · 2027</span></div>
@@ -110,19 +121,23 @@
           <div class="postal-back" aria-hidden="true"></div>
           <figure class="story-photo">
             <img src="../assets/our-moment.jpg" alt="함께 누워 웃으며 손을 뻗는 기훈과 승미의 사진" width="1536" height="1152" loading="lazy">
-            <figcaption><span>Our days, our forever.</span><small>기훈 · 승미 &nbsp; / &nbsp; 2027. 03. 28.</small></figcaption>
+            <figcaption><span>A moment, sent with love.</span><small>기훈 · 승미 &nbsp; / &nbsp; 2027. 03. 28.</small></figcaption>
           </figure>
           <div class="postal-cover" aria-hidden="true">
-            <span class="postal-cover__edition">A LITTLE LETTER OF LOVE</span>
-            <span class="postal-love-stamp"><span>♡</span><small>WITH LOVE</small></span>
+            <span class="postal-cover__edition">THE WEDDING POST<br>기훈과 승미의 결혼 소식</span>
+            <span class="postal-love-stamp"><img src="../assets/our-moment.jpg" alt="" width="1536" height="1152" loading="lazy"><small>03.28 · 2027</small></span>
             <span class="postal-addressee"><small>받는 분</small><strong>소중한 당신께</strong></span>
-            <span class="postal-postmark">SEOUL<em>28</em>MAR 2027</span>
-            <span class="postal-sender">보내는 이 &nbsp; 기훈과 승미</span>
+            <svg class="postal-postmark" viewBox="0 0 160 86">
+              <circle cx="43" cy="43" r="35"/><circle cx="43" cy="43" r="30"/>
+              <path d="M21 35h44M21 51h44M77 29c13-11 26 11 39 0s26 11 39 0M77 39c13-11 26 11 39 0s26 11 39 0M77 49c13-11 26 11 39 0s26 11 39 0M77 59c13-11 26 11 39 0s26 11 39 0"/>
+              <text x="43" y="27">SEOUL</text><text class="postage-cancellation__date" x="43" y="46">2027.03.28</text><text x="43" y="64">WITH LOVE</text>
+            </svg>
+            <span class="postal-sender">보내는 이 &nbsp; 이기훈 · 한승미</span>
           </div>
         </div>
         <div class="letter-story__copy">
-          <p class="story-line story-line--one"><span>함께 웃던 우리의 날들이</span></p>
-          <p class="story-line story-line--two"><span>이제, 평생의 약속이 됩니다.</span></p>
+          <p class="story-line story-line--one"><span>우리의 가장 소중한 소식을</span></p>
+          <p class="story-line story-line--two"><span>당신에게 전합니다.</span></p>
         </div>
         <p class="letter-story__hint" aria-hidden="true">천천히, 편지를 펼쳐 주세요 <span>↓</span></p>
         <div class="letter-story__progress" aria-hidden="true"><span></span></div>
@@ -256,9 +271,9 @@
     </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js?v=10"></script>
-  <script src="config.js?v=10"></script>
-  <script src="guest-upload.js?v=10"></script>
-  <script src="interactions.js?v=10"></script>
+  <script src="script.js?v=11"></script>
+  <script src="config.js?v=11"></script>
+  <script src="guest-upload.js?v=11"></script>
+  <script src="interactions.js?v=11"></script>
 </body>
 </html>

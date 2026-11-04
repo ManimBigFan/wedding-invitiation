@@ -117,7 +117,7 @@
   let lastStory = -1;
   const foldProperties = ['--fold-upper', '--fold-lower', '--fold-shade', '--crease-opacity', '--fold-shadow-y', '--fold-shadow-blur', '--fold-shadow-opacity'];
   const printProperties = ['--print-y', '--print-rotation', '--print-scale', '--print-clip', '--print-shadow-y', '--print-shadow-blur', '--print-shadow-opacity'];
-  const storyProperties = ['--heading-opacity', '--heading-y', '--grid-opacity', '--grid-angle', '--grid-scale', '--envelope-x', '--envelope-y', '--envelope-angle', '--envelope-opacity', '--photo-x', '--photo-y', '--photo-angle', '--photo-scale', '--photo-clip', '--photo-shadow-y', '--photo-shadow-blur', '--backing-opacity', '--backing-y', '--backing-left', '--backing-right', '--line-one-opacity', '--line-one-y', '--line-two-opacity', '--line-two-y', '--hint-opacity', '--story-progress'];
+  const storyProperties = ['--heading-opacity', '--heading-y', '--grid-opacity', '--grid-angle', '--grid-scale', '--envelope-x', '--envelope-y', '--envelope-angle', '--envelope-opacity', '--postmark-opacity', '--postmark-scale', '--photo-x', '--photo-y', '--photo-angle', '--photo-scale', '--photo-clip', '--photo-shadow-y', '--photo-shadow-blur', '--backing-opacity', '--backing-y', '--backing-left', '--backing-right', '--line-one-opacity', '--line-one-y', '--line-two-opacity', '--line-two-y', '--hint-opacity', '--story-progress'];
 
   function clearProperties(element, properties) {
     if (element) properties.forEach(property => element.style.removeProperty(property));
@@ -147,6 +147,7 @@
   }
 
   function updateStory(progress) {
+    const postmark = phase(.015, .085, progress);
     const pull = phase(.08, .48, progress);
     const release = phase(.18, .69, progress);
     const settle = phase(.45, .78, progress);
@@ -164,6 +165,8 @@
       '--envelope-y': `${(release * 180).toFixed(1)}px`,
       '--envelope-angle': `${(-6 + release * 28).toFixed(2)}deg`,
       '--envelope-opacity': (1 - phase(.48, .72, progress)).toFixed(3),
+      '--postmark-opacity': (.8 * postmark).toFixed(3),
+      '--postmark-scale': (1.4 - .4 * postmark).toFixed(3),
       '--photo-x': `${(diagonal * 30 * (1 - settle)).toFixed(1)}px`,
       '--photo-y': `${(65 - pull * 140 + settle * 75).toFixed(1)}px`,
       '--photo-angle': `${(-5 * (1 - settle) + diagonal * 14).toFixed(2)}deg`,
