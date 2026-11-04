@@ -61,7 +61,7 @@
             textObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: .12, rootMargin: '0px 0px -28px 0px' });
+      }, { threshold: .15, rootMargin: '0px 0px -36px 0px' });
       textTargets.forEach(element => {
         const fragment = document.createDocumentFragment();
         let lineIndex = 0;
@@ -71,7 +71,7 @@
           line.className = 'reveal-line';
           ink = document.createElement('span');
           ink.className = 'reveal-line__ink';
-          ink.style.setProperty('--line-delay', `${lineIndex++ * 110}ms`);
+          ink.style.setProperty('--line-delay', `${lineIndex++ * 170}ms`);
           line.append(ink);
           fragment.append(line);
         };
@@ -100,160 +100,145 @@
   const paper = document.querySelector('.paper-fold');
   const printStage = document.querySelector('.print-stage');
   const print = printStage?.querySelector('.moment');
-  if (!foldSection || !paper || !printStage || !print) return;
-
   const story = document.getElementById('promise-story');
-  const stage = story?.querySelector('.promise-stage');
-  const canvas = document.getElementById('promise-canvas');
-  const softwareCanvas = document.getElementById('promise-software');
-  let renderer;
-  let rendererKind = '';
-  let webglFailed = false;
-  let softwareFailed = false;
-  let storyAnimated = false;
-  let storyTop = 0;
-  let storyHeight = 0;
-  let storyTravel = 1;
-  let lastStory = -1;
-  let redrawStory = true;
-
+  const stage = story?.querySelector('.letter-stage');
   let enabled = false;
   let frame = 0;
   let layoutDirty = true;
   let viewportHeight = 0;
   let foldTop = 0;
   let printTop = 0;
+  let storyTop = 0;
+  let storyHeight = 0;
+  let storyTravel = 1;
+  let storyAnimated = false;
   let lastFold = -1;
   let lastPrint = -1;
+  let lastStory = -1;
   const foldProperties = ['--fold-upper', '--fold-lower', '--fold-shade', '--crease-opacity', '--fold-shadow-y', '--fold-shadow-blur', '--fold-shadow-opacity'];
-  const printProperties = ['--print-y', '--print-rotation', '--print-shadow-y', '--print-shadow-blur', '--print-shadow-opacity'];
+  const printProperties = ['--print-y', '--print-rotation', '--print-scale', '--print-clip', '--print-shadow-y', '--print-shadow-blur', '--print-shadow-opacity'];
+  const storyProperties = ['--heading-opacity', '--heading-y', '--grid-opacity', '--grid-angle', '--grid-scale', '--envelope-x', '--envelope-y', '--envelope-angle', '--envelope-opacity', '--photo-x', '--photo-y', '--photo-angle', '--photo-scale', '--photo-clip', '--photo-shadow-y', '--photo-shadow-blur', '--backing-opacity', '--backing-y', '--backing-left', '--backing-right', '--line-one-opacity', '--line-one-y', '--line-two-opacity', '--line-two-y', '--hint-opacity', '--story-progress'];
+
+  function clearProperties(element, properties) {
+    if (element) properties.forEach(property => element.style.removeProperty(property));
+  }
 
   function clearMotion() {
     cancelAnimationFrame(frame);
     frame = 0;
-    foldProperties.forEach(property => paper.style.removeProperty(property));
-    printProperties.forEach(property => print.style.removeProperty(property));
-    lastFold = lastPrint = -1;
+    clearProperties(paper, foldProperties);
+    clearProperties(print, printProperties);
+    lastFold = lastPrint = lastStory = -1;
   }
 
   const clamp = value => Math.min(1, Math.max(0, value));
   const ease = value => value * value * (3 - 2 * value);
   const phase = (start, end, value) => ease(clamp((value - start) / (end - start)));
 
-  function failStory() {
-    const failedKind = rendererKind;
-    if (failedKind === 'webgl') webglFailed = true;
-    else if (failedKind === 'canvas') softwareFailed = true;
-    try { renderer?.dispose(); } catch { /* A lost context already released its buffers. */ }
-    renderer = null;
-    rendererKind = '';
-    storyAnimated = false;
-    story?.classList.remove('is-animated', 'is-rendered');
-    story?.removeAttribute('style');
-    story?.removeAttribute('data-renderer');
-    if (failedKind === 'webgl' && !softwareFailed && root.dataset.design === 'letter') selectStory();
-    schedule(true);
-  }
-
   function selectStory() {
-    if (!story || !stage || !canvas) return;
-    story.removeAttribute('style');
-    lastStory = -1;
-    redrawStory = true;
-    const selected = root.dataset.design === 'letter';
-    if (selected && !renderer && !webglFailed) {
-      try {
-        renderer = window.WeddingRings?.create(canvas);
-        if (renderer) rendererKind = 'webgl';
-        else webglFailed = true;
-      } catch { webglFailed = true; }
-    }
-    if (selected && !renderer && !softwareFailed && softwareCanvas) {
-      try {
-        renderer = window.WeddingRingsFallback?.create(softwareCanvas);
-        if (renderer) rendererKind = 'canvas';
-        else softwareFailed = true;
-      } catch { softwareFailed = true; }
-    }
-    storyAnimated = Boolean(selected && enabled && renderer && window.CSS?.supports?.('overflow', 'clip'));
-    story.classList.toggle('is-animated', storyAnimated);
-    if (selected && renderer) {
-      try {
-        if (!renderer.render(storyAnimated ? 0 : 1)) { failStory(); return; }
-        story.dataset.renderer = rendererKind;
-        story.classList.add('is-rendered');
-      } catch { failStory(); }
+    const next = Boolean(story && stage && enabled && window.innerHeight >= 640 && window.CSS?.supports?.('overflow', 'clip'));
+    if (next !== storyAnimated || !next) {
+      storyAnimated = next;
+      story?.classList.toggle('is-animated', next);
+      clearProperties(story, storyProperties);
+      lastStory = -1;
+      layoutDirty = true;
     }
   }
 
-  canvas?.addEventListener('webglcontextlost', () => { if (rendererKind === 'webgl') failStory(); });
+  function updateStory(progress) {
+    const pull = phase(.08, .48, progress);
+    const release = phase(.18, .69, progress);
+    const settle = phase(.45, .78, progress);
+    const headingOut = phase(.10, .32, progress);
+    const lineOne = phase(.55, .70, progress);
+    const lineTwo = phase(.70, .87, progress);
+    const diagonal = Math.sin(pull * Math.PI);
+    const values = {
+      '--heading-opacity': (1 - headingOut).toFixed(3),
+      '--heading-y': `${(-headingOut * 28).toFixed(1)}px`,
+      '--grid-opacity': (.52 * (1 - phase(.30, .62, progress))).toFixed(3),
+      '--grid-angle': `${(-release * 6).toFixed(2)}deg`,
+      '--grid-scale': (1 + release * .045).toFixed(3),
+      '--envelope-x': `${(release * 120).toFixed(1)}px`,
+      '--envelope-y': `${(release * 180).toFixed(1)}px`,
+      '--envelope-angle': `${(-6 + release * 28).toFixed(2)}deg`,
+      '--envelope-opacity': (1 - phase(.48, .72, progress)).toFixed(3),
+      '--photo-x': `${(diagonal * 30 * (1 - settle)).toFixed(1)}px`,
+      '--photo-y': `${(65 - pull * 140 + settle * 75).toFixed(1)}px`,
+      '--photo-angle': `${(-5 * (1 - settle) + diagonal * 14).toFixed(2)}deg`,
+      '--photo-scale': (.72 + pull * .30 - settle * .02).toFixed(3),
+      '--photo-clip': `${(38 * (1 - pull)).toFixed(1)}%`,
+      '--photo-shadow-y': `${(7 + diagonal * 10 + settle * 3).toFixed(1)}px`,
+      '--photo-shadow-blur': `${(18 + diagonal * 18 + settle * 4).toFixed(1)}px`,
+      '--backing-opacity': phase(.25, .55, progress).toFixed(3),
+      '--backing-y': `${(30 * (1 - settle)).toFixed(1)}px`,
+      '--backing-left': `${(-14 + settle * 11).toFixed(2)}deg`,
+      '--backing-right': `${(12 - settle * 10).toFixed(2)}deg`,
+      '--line-one-opacity': lineOne.toFixed(3),
+      '--line-one-y': `${(110 * (1 - lineOne)).toFixed(1)}%`,
+      '--line-two-opacity': lineTwo.toFixed(3),
+      '--line-two-y': `${(110 * (1 - lineTwo)).toFixed(1)}%`,
+      '--hint-opacity': (1 - phase(.03, .18, progress)).toFixed(3),
+      '--story-progress': progress.toFixed(4)
+    };
+    Object.entries(values).forEach(([property, value]) => story.style.setProperty(property, value));
+  }
 
   function update() {
     frame = 0;
     if (!enabled || document.hidden) return;
     const scrollY = window.scrollY;
     if (layoutDirty) {
+      selectStory();
       viewportHeight = window.innerHeight;
-      // Measure untransformed normal-flow parents, never animated surfaces.
-      foldTop = foldSection.getBoundingClientRect().top + scrollY;
-      printTop = printStage.getBoundingClientRect().top + scrollY;
+      // Only untransformed parents are measured; the paper remains in normal flow.
+      if (foldSection && paper) foldTop = foldSection.getBoundingClientRect().top + scrollY;
+      if (printStage && print) printTop = printStage.getBoundingClientRect().top + scrollY;
       if (story && stage) {
         storyTop = story.getBoundingClientRect().top + scrollY;
         storyHeight = story.offsetHeight;
         storyTravel = Math.max(1, storyHeight - stage.offsetHeight);
-        redrawStory = true;
       }
       layoutDirty = false;
     }
     if (storyAnimated && storyTop - scrollY < viewportHeight && storyTop + storyHeight - scrollY > 0) {
       const progress = clamp((scrollY - storyTop + 64) / storyTravel);
-      if (redrawStory || Math.abs(progress - lastStory) > .0005) {
-        const headingOut = phase(.13, .40, progress);
-        const startOut = phase(.24, .49, progress);
-        const endIn = phase(.62, .82, progress);
-        story.style.setProperty('--story-heading-opacity', (1 - headingOut).toFixed(3));
-        story.style.setProperty('--story-heading-y', `${(-headingOut * 28).toFixed(1)}px`);
-        story.style.setProperty('--story-start-opacity', (1 - startOut).toFixed(3));
-        story.style.setProperty('--story-start-y', `${(-startOut * 20).toFixed(1)}px`);
-        story.style.setProperty('--story-end-opacity', endIn.toFixed(3));
-        story.style.setProperty('--story-end-y', `${((1 - endIn) * 24).toFixed(1)}px`);
-        story.style.setProperty('--story-hint-opacity', (1 - phase(.04, .22, progress)).toFixed(3));
-        story.style.setProperty('--story-progress', progress.toFixed(4));
-        story.style.setProperty('--story-shadow', (1 + Math.sin(progress * Math.PI) * .2).toFixed(3));
-        try { if (!renderer.render(progress)) failStory(); }
-        catch { failStory(); }
+      if (Math.abs(progress - lastStory) > .0005) {
+        updateStory(progress);
         lastStory = progress;
-        redrawStory = false;
       }
     }
-    const fold = 1 - ease(clamp((viewportHeight * .9 - (foldTop - scrollY)) / (viewportHeight * .66)));
-    const settle = 1 - ease(clamp((viewportHeight * .96 - (printTop - scrollY)) / (viewportHeight * .5)));
-
-    if (Math.abs(fold - lastFold) > .001) {
-      paper.style.setProperty('--fold-upper', `${(-14 * fold).toFixed(2)}deg`);
-      paper.style.setProperty('--fold-lower', `${(18 * fold).toFixed(2)}deg`);
-      paper.style.setProperty('--fold-shade', (.035 + fold * .14).toFixed(3));
-      paper.style.setProperty('--crease-opacity', (.35 + fold * .55).toFixed(3));
-      paper.style.setProperty('--fold-shadow-y', `${(4 + fold * 11).toFixed(1)}px`);
-      paper.style.setProperty('--fold-shadow-blur', `${(12 + fold * 15).toFixed(1)}px`);
-      paper.style.setProperty('--fold-shadow-opacity', (.05 + fold * .07).toFixed(3));
-      lastFold = fold;
+    if (paper && foldSection) {
+      const fold = 1 - ease(clamp((viewportHeight * .9 - (foldTop - scrollY)) / (viewportHeight * .66)));
+      if (Math.abs(fold - lastFold) > .001) {
+        paper.style.setProperty('--fold-upper', `${(-14 * fold).toFixed(2)}deg`);
+        paper.style.setProperty('--fold-lower', `${(18 * fold).toFixed(2)}deg`);
+        paper.style.setProperty('--fold-shade', (.035 + fold * .14).toFixed(3));
+        paper.style.setProperty('--crease-opacity', (.35 + fold * .55).toFixed(3));
+        paper.style.setProperty('--fold-shadow-y', `${(4 + fold * 11).toFixed(1)}px`);
+        paper.style.setProperty('--fold-shadow-blur', `${(12 + fold * 15).toFixed(1)}px`);
+        paper.style.setProperty('--fold-shadow-opacity', (.05 + fold * .07).toFixed(3));
+        lastFold = fold;
+      }
     }
-    if (Math.abs(settle - lastPrint) > .001) {
-      print.style.setProperty('--print-y', `${(18 * settle).toFixed(2)}px`);
-      print.style.setProperty('--print-rotation', `${(-3.4 * settle).toFixed(2)}deg`);
-      print.style.setProperty('--print-shadow-y', `${(3 + settle * 9).toFixed(1)}px`);
-      print.style.setProperty('--print-shadow-blur', `${(8 + settle * 15).toFixed(1)}px`);
-      print.style.setProperty('--print-shadow-opacity', (.06 + settle * .07).toFixed(3));
-      lastPrint = settle;
+    if (print && printStage) {
+      const settle = 1 - ease(clamp((viewportHeight * .94 - (printTop - scrollY)) / (viewportHeight * .52)));
+      if (Math.abs(settle - lastPrint) > .001) {
+        print.style.setProperty('--print-y', `${(48 * settle).toFixed(2)}px`);
+        print.style.setProperty('--print-rotation', `${(-7.5 * settle).toFixed(2)}deg`);
+        print.style.setProperty('--print-scale', (1 - .08 * settle).toFixed(3));
+        print.style.setProperty('--print-clip', `${(16 * settle).toFixed(1)}%`);
+        print.style.setProperty('--print-shadow-y', `${(3 + settle * 12).toFixed(1)}px`);
+        print.style.setProperty('--print-shadow-blur', `${(8 + settle * 20).toFixed(1)}px`);
+        print.style.setProperty('--print-shadow-opacity', (.06 + settle * .09).toFixed(3));
+        lastPrint = settle;
+      }
     }
   }
 
   function schedule(measure = false) {
     if (measure) layoutDirty = true;
-    if (!storyAnimated && measure && renderer && root.dataset.design === 'letter' && !document.hidden) {
-      try { if (!renderer.render(1)) failStory(); } catch { failStory(); }
-    }
     if (enabled && !document.hidden && !frame) frame = requestAnimationFrame(update);
   }
 
@@ -281,10 +266,10 @@
   if (motion.addEventListener) motion.addEventListener('change', onMotionChange);
   else motion.addListener?.(onMotionChange);
 
-  // Fonts and images can move a section after first layout; no animation loop runs at rest.
+  // Optional sections never prevent cleanup, preferences, or navigation listeners.
   document.fonts?.ready.then(() => schedule(true));
   document.fonts?.addEventListener?.('loadingdone', () => schedule(true));
-  document.querySelectorAll('.hero--letter img, .moments-section img').forEach(image => {
+  document.querySelectorAll('.hero--letter img, .letter-story img, .moments-section img').forEach(image => {
     if (!image.complete) image.addEventListener('load', () => schedule(true), { once: true });
   });
   if ('ResizeObserver' in window) {

@@ -42,7 +42,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body>
   <a class="skip-link" href="#invitation">초대의 글로 건너뛰기</a>
@@ -97,32 +97,35 @@
       <div class="emboss-bottom"><p class="hero__names">이기훈 <span>·</span> 한승미</p><div class="hero__details"><p class="hero__date">2027. 03. 28.</p><p>일요일 오전 11시 30분</p><p class="hero__venue">더채플앳청담</p></div><a class="button button--outline" href="#invitation">초대의 글 <span aria-hidden="true">↓</span></a></div>
     </header>
 
-    <section class="promise-story" id="promise-story" aria-labelledby="promise-title">
-      <div class="promise-stage">
-        <div class="promise-heading">
-          <p class="eyebrow">THE PROMISE</p>
-          <h2 id="promise-title">서로의 하루가,<br><em>하나의 약속으로.</em></h2>
+    <section class="letter-story" id="promise-story" aria-labelledby="promise-title">
+      <div class="letter-stage">
+        <div class="letter-story__heading">
+          <p class="eyebrow">A LETTER, FOR YOU</p>
+          <h2 id="promise-title">당신에게 도착한<br>우리의 이야기.</h2>
         </div>
-        <div class="promise-art" aria-hidden="true">
-          <span class="promise-ground"></span>
-          <svg class="promise-fallback" viewBox="0 0 440 420">
-            <defs>
-              <linearGradient id="band-gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8c6b39"/><stop offset=".27" stop-color="#e6d6ad"/><stop offset=".48" stop-color="#fbf2d6"/><stop offset=".68" stop-color="#b39158"/><stop offset="1" stop-color="#e5d3a9"/></linearGradient>
-            </defs>
-            <ellipse cx="177" cy="196" rx="80" ry="104" transform="rotate(-32 177 196)" fill="none" stroke="#9e7e4d" stroke-width="25"/>
-            <ellipse cx="177" cy="192" rx="80" ry="104" transform="rotate(-32 177 192)" fill="none" stroke="url(#band-gold)" stroke-width="21"/>
-            <ellipse cx="270" cy="240" rx="79" ry="101" transform="rotate(37 270 240)" fill="none" stroke="#9e7e4d" stroke-width="24"/>
-            <ellipse cx="270" cy="235" rx="79" ry="101" transform="rotate(37 270 235)" fill="none" stroke="url(#band-gold)" stroke-width="20"/>
-          </svg>
-          <canvas id="promise-canvas"></canvas>
-          <canvas id="promise-software"></canvas>
+        <div class="letter-story__art">
+          <div class="postal-grid" aria-hidden="true"><span>TO OUR DEAREST</span><span>SEOUL · 2027</span></div>
+          <div class="letter-backing letter-backing--left" aria-hidden="true"></div>
+          <div class="letter-backing letter-backing--right" aria-hidden="true"></div>
+          <div class="postal-back" aria-hidden="true"></div>
+          <figure class="story-photo">
+            <img src="../assets/our-moment.jpg" alt="함께 누워 웃으며 손을 뻗는 기훈과 승미의 사진" width="1536" height="1152" loading="lazy">
+            <figcaption><span>Our days, our forever.</span><small>기훈 · 승미 &nbsp; / &nbsp; 2027. 03. 28.</small></figcaption>
+          </figure>
+          <div class="postal-cover" aria-hidden="true">
+            <span class="postal-cover__edition">A LITTLE LETTER OF LOVE</span>
+            <span class="postal-love-stamp"><span>♡</span><small>WITH LOVE</small></span>
+            <span class="postal-addressee"><small>받는 분</small><strong>소중한 당신께</strong></span>
+            <span class="postal-postmark">SEOUL<em>28</em>MAR 2027</span>
+            <span class="postal-sender">보내는 이 &nbsp; 기훈과 승미</span>
+          </div>
         </div>
-        <div class="promise-caption">
-          <p class="promise-caption__start">서로 다른 날들을 지나</p>
-          <p class="promise-caption__end">이제, 같은 내일을<br>약속합니다.</p>
+        <div class="letter-story__copy">
+          <p class="story-line story-line--one"><span>함께 웃던 우리의 날들이</span></p>
+          <p class="story-line story-line--two"><span>이제, 평생의 약속이 됩니다.</span></p>
         </div>
-        <p class="promise-scroll" aria-hidden="true">우리의 이야기를 따라 <span>↓</span></p>
-        <div class="promise-progress" aria-hidden="true"><span></span></div>
+        <p class="letter-story__hint" aria-hidden="true">천천히, 편지를 펼쳐 주세요 <span>↓</span></p>
+        <div class="letter-story__progress" aria-hidden="true"><span></span></div>
       </div>
     </section>
 
@@ -253,11 +256,9 @@
     </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js?v=9"></script>
-  <script src="config.js?v=9"></script>
-  <script src="guest-upload.js?v=9"></script>
-  <script src="rings.js?v=9"></script>
-  <script src="rings-fallback.js?v=9"></script>
-  <script src="interactions.js?v=9"></script>
+  <script src="script.js?v=10"></script>
+  <script src="config.js?v=10"></script>
+  <script src="guest-upload.js?v=10"></script>
+  <script src="interactions.js?v=10"></script>
 </body>
 </html>
