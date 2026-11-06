@@ -46,7 +46,7 @@
 
   // Readable HTML is the default. Only a working observer opts copy into reveals.
   const textTargets = [...document.querySelectorAll('.section h2, .invitation-copy, .moment-note, .guest-photo-copy, .closing__message')];
-  const softTargets = [...document.querySelectorAll('.section .eyebrow, .signature, .closing__script, .closing__names')];
+  const softTargets = [...document.querySelectorAll('.section .eyebrow, .closing__script, .closing__names')];
   let textObserver;
   function revealCopy() {
     textObserver?.disconnect();
@@ -94,6 +94,53 @@
         event.target.closest?.('.is-reveal-ready')?.classList.add('is-revealed');
       });
     } catch { revealCopy(); }
+  }
+
+  // Draw the signature once when the reader reaches the end of the letter.
+  // All strokes are visible unless a running animation supplies a different pose.
+  const signature = document.querySelector('.written-signature');
+  if (signature && !motion.matches && 'IntersectionObserver' in window && typeof signature.animate === 'function') {
+    const strokes = [...signature.querySelectorAll('path')];
+    const animations = [];
+    function finishSignature() {
+      animations.splice(0).forEach(animation => animation.cancel());
+    }
+    let signatureObserver;
+    function onSignatureVisible(entries) {
+      if (!entries.some(entry => entry.isIntersecting) || root.dataset.design !== 'letter' || document.hidden) return;
+      signatureObserver.disconnect();
+      if (motion.matches || !strokes.length) return;
+
+      try {
+        const lengths = strokes.map(path => Math.max(1, path.getTotalLength()));
+        const totalLength = lengths.reduce((sum, length) => sum + length, 0);
+        let delay = 60;
+        strokes.forEach((path, index) => {
+          if (index && strokes[index - 1].parentElement !== path.parentElement) {
+            delay += path.parentElement.dataset.syllable === '드' ? 120 : 46;
+          }
+          const duration = 18 + 1550 * lengths[index] / totalLength;
+          const animation = path.animate([
+            { strokeDasharray: '1 1', strokeDashoffset: '1', opacity: 0 },
+            { strokeDasharray: '1 1', strokeDashoffset: '.97', opacity: 1, offset: .04 },
+            { strokeDasharray: '1 1', strokeDashoffset: '0', opacity: 1 }
+          ], { duration, delay, easing: 'ease-in-out', fill: 'backwards' });
+          animations.push(animation);
+          delay += duration + 12;
+        });
+        animations[animations.length - 1].onfinish = finishSignature;
+      } catch { finishSignature(); }
+    }
+    try {
+      signatureObserver = new IntersectionObserver(onSignatureVisible);
+      signatureObserver.observe(signature);
+    } catch { signatureObserver?.disconnect(); }
+    document.addEventListener('wedding:designchange', finishSignature);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) finishSignature(); });
+    window.addEventListener('pagehide', finishSignature);
+    const onInkPreference = () => { if (motion.matches) finishSignature(); };
+    if (motion.addEventListener) motion.addEventListener('change', onInkPreference);
+    else motion.addListener?.(onInkPreference);
   }
 
   const foldSection = document.querySelector('.invitation-section');

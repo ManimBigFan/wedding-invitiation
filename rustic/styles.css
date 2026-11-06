@@ -30,6 +30,14 @@
 .hero--letter .hero__names{margin-top:23px}
 .hero--letter .scroll-cue{margin-top:29px}
 
+/* The letter closes with a pen signature. Other designs use the printed names. */
+.written-signature{display:none}
+.signature .signature-print{font:inherit;letter-spacing:inherit;margin:0}
+[data-design=letter] .written-signature{display:block;width:min(218px,100%);height:auto;margin:0 auto;color:#665344;stroke-width:2.1}
+[data-design=letter] .signature-print{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(prefers-reduced-motion:reduce){.written-signature path{opacity:1!important;stroke-dashoffset:0!important;stroke-dasharray:none!important}}
+@media print{.written-signature path{opacity:1!important;stroke-dashoffset:0!important;stroke-dasharray:none!important}}
+
 /* One sheet leaves its envelope and becomes the cover itself. */
 .letter-card{display:flex;flex-direction:column;align-items:center;width:100%;position:relative;z-index:1}
 .envelope-intro{display:none;pointer-events:none;user-select:none}
