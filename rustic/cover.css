@@ -1,0 +1,152 @@
+/* The Wedding Post — a plum printed cover with a removable ivory postage print. */
+[data-design=letter] .hero--letter.post-cover {
+  --post-perforation:url("../assets/stamp-edge.svg");
+  --post-plum:#482930; --post-plum-deep:#382126; --post-ivory:#f3e8d4;
+  --post-copper:#dcba96; --post-rule:#ae8468; --post-ink:#4b3033;
+  isolation:isolate; align-items:stretch; justify-content:center; position:relative;
+  padding:10px; min-height:min(814px,calc(100svh - 64px));
+  background:var(--post-plum-deep); color:var(--post-ivory); text-align:left;
+}
+.post-cover .post-edition {
+  display:flex; flex:1 0 auto; align-items:stretch; justify-content:center;
+  padding:clamp(16px,4.5vw,23px) clamp(15px,4.9vw,24px) 4px;
+  min-width:0; border:1px solid #bc9475a6;
+  background:radial-gradient(ellipse at 20% 18%,#543238,transparent 72%),var(--post-plum);
+  box-shadow:inset 0 0 0 3px var(--post-plum),inset 0 0 0 4px #bea18429;
+}
+.post-cover .post-edition__imprint {
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  border-top:1px solid var(--post-rule); border-bottom:1px solid #b9917270;
+  padding:8px 1px 7px; color:var(--post-copper); font-family:var(--english);
+  font-size:9px; font-weight:500; line-height:1.5; letter-spacing:1.7px;
+}
+.post-cover .post-edition__head { position:relative; isolation:isolate; padding:19px 0 7px; }
+.post-cover .post-edition__masthead {
+  position:relative; z-index:1; margin:0; color:#fbedd6;
+  font-family:var(--english); font-weight:400; font-size:clamp(61px,18.2vw,87px);
+  line-height:.76; letter-spacing:-.056em; text-align:left;
+}
+.post-cover .post-edition__masthead>span,.post-cover .post-edition__masthead>em { display:block; }
+.post-cover .post-edition__masthead>em { margin-left:34%; font-weight:400; line-height:.82; }
+.post-cover .post-edition__botanical {
+  position:absolute; z-index:0; right:-6px; top:5px; width:32%; height:105%; pointer-events:none;
+  background:var(--post-copper); opacity:.78;
+  -webkit-mask:url('../assets/postal-botanical.svg') center/contain no-repeat;
+  mask:url('../assets/postal-botanical.svg') center/contain no-repeat;
+}
+.post-cover .post-plate { position:relative; margin:11px 0 23px; min-width:0; }
+.post-cover .post-gum-shadow {
+  position:relative; width:min(84%,320px); margin:0 0 0 3%; transform:rotate(-3.5deg);
+  filter:drop-shadow(2px 7px 5px #200e1670);
+}
+.post-cover .post-gum {
+  position:relative; padding:11px 12px 10px; background:#f4e7cf; color:#4b3233;
+  /* A portable SVG alpha mask cuts rounded notches into all four actual edges. */
+  -webkit-mask:var(--post-perforation) center/100% 100% no-repeat;
+  mask:var(--post-perforation) center/100% 100% no-repeat;
+}
+.post-cover .post-gum__rail {
+  display:flex; justify-content:space-between; gap:7px; align-items:center; padding:0 1px 7px;
+  font-family:var(--english); font-size:8px; font-weight:600; letter-spacing:1.5px; line-height:1.4;
+}
+.post-cover .post-gum img {
+  display:block; width:100%; height:auto; aspect-ratio:4/3; object-fit:cover; object-position:50% 65%;
+  filter:grayscale(1) sepia(.13) contrast(1.08); border:1px solid #93806d;
+}
+.post-cover .post-gum__impression {
+  display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:6px 1px 0;
+  font-family:var(--english); line-height:1.1;
+}
+.post-cover .post-gum__impression>em { font-size:clamp(19px,5.5vw,24px); font-weight:500; }
+.post-cover .post-gum__impression>span { font-size:clamp(18px,5.2vw,23px); letter-spacing:.6px; }
+.post-cover .post-plate__dedication {
+  position:absolute; top:6px; right:0; writing-mode:vertical-rl; color:var(--post-copper);
+  font-size:10px; line-height:1.5; letter-spacing:2px;
+}
+.post-cover .post-edition__cancel {
+  position:absolute; z-index:3; width:clamp(105px,30vw,149px); height:auto;
+  right:-5px; bottom:4%; overflow:visible; pointer-events:none; stroke-width:1.1;
+}
+.post-cover .post-edition__postmark { stroke:#79564c; }
+.post-cover .post-edition__postmark>circle:first-child{fill:#efdfc5e3}
+.post-cover .post-edition__postmark>circle:nth-child(2){fill:none}
+.post-cover .post-edition__postmark text {
+  fill:#66443f; stroke:none; font-family:var(--english); font-weight:600;
+  font-size:7.2px; letter-spacing:1.3px; text-anchor:middle;
+}
+.post-cover .post-edition__postmark .post-edition__date-ink { font-size:9.5px; letter-spacing:.3px; }
+.post-cover .post-edition__waves { stroke:#cdac88; stroke-width:1.25; }
+.post-cover .post-record {
+  position:relative; background:#f4ead8; color:var(--post-ink); text-align:left;
+  padding:13px 16px 14px; border-top:2px solid #d6b38c; border-bottom:2px solid #d6b38c;
+  box-shadow:0 2px 4px #2512191a;
+}
+.post-cover .post-record__names { font-size:clamp(23px,6.5vw,29px); line-height:1.55; letter-spacing:.9px; font-weight:500; }
+.post-cover .post-record__names>span { padding:0 3px; color:#9a7668; font-size:.62em; vertical-align:middle; }
+.post-cover .post-record__details {
+  display:grid; grid-template-columns:minmax(0,1.16fr) minmax(0,1fr); align-items:end;
+  gap:12px; margin-top:7px; padding-top:9px; border-top:1px solid #a88c746b;
+}
+.post-cover .post-record__details time,.post-cover .post-record__place { display:block; min-width:0; }
+.post-cover .post-record__details time>strong {
+  display:block; font-family:var(--english); font-size:clamp(20px,5.5vw,24px); line-height:1.15; letter-spacing:1px; font-weight:600;
+}
+.post-cover .post-record__details time>span { display:block; margin-top:4px; font-size:12px; line-height:1.8; white-space:nowrap; }
+.post-cover .post-record__place { padding-left:13px; border-left:1px solid #b9a18a78; }
+.post-cover .post-record__place>small { display:block; margin-bottom:3px; color:#695147; font-family:var(--english); font-size:8px; letter-spacing:1.5px; line-height:1.6; }
+.post-cover .post-record__place>span { display:block; font-size:clamp(13px,3.8vw,16px); line-height:1.8; white-space:nowrap; }
+.post-cover .post-edition__open {
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  min-height:46px; margin-top:3px; padding:7px 1px; color:#f1dfc8;
+  font-size:11px; line-height:1.8; letter-spacing:.5px;
+}
+.post-cover .post-edition__open svg { width:24px; height:19px; stroke:var(--post-copper); stroke-width:1.25; }
+.post-cover .post-edition__open:focus-visible { outline:2px solid #fae8c8; outline-offset:1px; }
+
+/* The actual edition sheet unfolds out of an ivory envelope lined with plum. */
+.post-cover .envelope-caption,.post-cover .envelope-from { color:#f1dfc8; }
+.post-cover .envelope-caption { top:calc(50% - 150px); }
+.post-cover .envelope-back,.post-cover .envelope-front,.post-cover .envelope-flap { top:calc(50% - 12px); }
+.post-cover .envelope-back { background:#dac8ac; border:1px solid #e7d4b6; box-shadow:0 12px 30px #1e101952; }
+.post-cover .envelope-back::before {
+  content:""; position:absolute; left:-1px; right:-1px; bottom:100%; height:105px;
+  transform-origin:bottom center; clip-path:polygon(0 100%,50% 0,100% 100%);
+  background:repeating-linear-gradient(38deg,transparent 0 6px,#d5a98233 6px 7px),#683e45;
+  pointer-events:none;
+}
+.post-cover .envelope-front { background:linear-gradient(145deg,#f4ead7,#e6d6bd); border-color:#d5c1a5; }
+.post-cover .envelope-flap { background:linear-gradient(#f3e8d5,#e5d5bc); filter:drop-shadow(0 1px 1px #291a1e30); }
+.post-cover .post-envelope-address { position:absolute; left:20px; right:20px; bottom:23px; text-align:center; font-size:14px; letter-spacing:1.6px; color:#6e5047; }
+[data-design=letter][data-auto-envelope] .post-cover .letter-card {
+  background:var(--post-plum); animation:post-edition-emerge 1.62s cubic-bezier(.22,1,.36,1) both;
+}
+[data-design=letter][data-auto-envelope] .post-cover .envelope-back::before { animation:post-lining-unfold 1.62s ease both; }
+[data-design=letter][data-auto-envelope] .post-cover .post-edition__cancel { animation:post-cancel-impression .48s .93s cubic-bezier(.18,.72,.24,1) both; }
+@keyframes post-edition-emerge {
+  0%,18%{transform:translateY(140px) scale(.43);clip-path:inset(0 0 49%);box-shadow:0 3px 12px #25101735}
+  48%{transform:translateY(-67px) scale(.43);clip-path:inset(0 0 29%);box-shadow:0 5px 16px #25101738}
+  66%{transform:translateY(-38px) scale(.68);clip-path:inset(0);box-shadow:0 9px 24px #25101729}
+  100%{transform:none;clip-path:inset(0);box-shadow:inset 0 0 0 3px var(--post-plum),inset 0 0 0 4px #bea18429}
+}
+@keyframes post-lining-unfold { 0%,20%{transform:scaleY(0);opacity:0} 47%,100%{transform:scaleY(1);opacity:1} }
+@keyframes post-cancel-impression { from{opacity:0;transform:translate(3px,-4px) scale(1.09)} 72%{opacity:1;transform:translate(0,1px) scale(.985)} to{opacity:1;transform:none} }
+@media(max-width:359px){
+  [data-design=letter] .hero--letter.post-cover{padding:8px}
+  .post-cover .post-edition{padding:15px 13px 3px}
+  .post-cover .post-edition__imprint{font-size:8px;letter-spacing:1.2px}
+  .post-cover .post-edition__head{padding-top:15px}
+  .post-cover .post-plate{margin-top:9px;margin-bottom:19px}
+  .post-cover .post-record{padding:11px 11px 12px}
+  .post-cover .post-record__details{gap:8px}
+  .post-cover .post-record__place{padding-left:9px}
+  .post-cover .post-record__details time>span{font-size:11.5px}
+}
+@media(max-height:680px){
+  .post-cover .post-edition__head{padding-top:13px;padding-bottom:5px}
+  .post-cover .post-edition__masthead{font-size:clamp(56px,16vw,73px)}
+  .post-cover .post-plate{margin-top:8px;margin-bottom:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  [data-design=letter][data-auto-envelope] .post-cover .envelope-intro{display:none!important}
+  [data-design=letter][data-auto-envelope] .post-cover .letter-card,[data-design=letter][data-auto-envelope] .post-cover .post-edition__cancel{animation:none!important;opacity:1!important;transform:none!important;clip-path:none!important}
+}

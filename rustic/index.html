@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f4f1e9">
+  <meta name="theme-color" content="#46292e">
   <meta name="description" content="이기훈과 한승미의 결혼식에 초대합니다. 2027년 3월 28일 일요일 오전 11시 30분, 더채플앳청담.">
   <meta property="og:title" content="이기훈 · 한승미, 결혼합니다">
   <meta property="og:description" content="2027. 03. 28. 일요일 오전 11시 30분 · 더채플앳청담">
@@ -41,53 +41,66 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+KR:wght@400;500&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="stationery.css?v=13">
+  <link rel="stylesheet" href="cover.css?v=13">
+  <link rel="stylesheet" href="postal-scene.css?v=13">
 </head>
 <body>
   <a class="skip-link" href="#invitation">초대의 글로 건너뛰기</a>
-  <nav class="design-switcher" aria-label="청첩장 시안 선택">
-    <span class="design-switcher__label">DESIGN<br>STUDY</span>
-    <a href="?design=letter" data-design-link="letter"><span>01</span> 편지</a>
-    <a href="?design=photo" data-design-link="photo"><span>02</span> 사진</a>
-    <a href="?design=emboss" data-design-link="emboss"><span>03</span> 여백</a>
+  <nav class="invitation-nav" aria-label="청첩장 바로가기">
+    <a href="#top">초대장</a>
+    <a href="#ceremony">예식 일시</a>
+    <a href="#location">오시는 길</a>
+    <a href="#wedding-snap">하객 사진</a>
   </nav>
 
   <main class="invitation-page" id="top">
-    <header class="hero hero--letter" aria-labelledby="letter-title">
+    <header class="hero hero--letter post-cover" aria-labelledby="letter-title">
       <div class="envelope-intro" aria-hidden="true">
         <p class="eyebrow envelope-caption">A LETTER FOR YOU</p>
         <span class="envelope-back"></span>
-        <span class="envelope-front"></span>
+        <span class="envelope-front"><span class="post-envelope-address">소중한 당신께</span></span>
         <span class="envelope-flap"></span>
-        <p class="envelope-from">이기훈 · 한승미 드림</p>
+        <p class="envelope-from">기훈과 승미 드림</p>
       </div>
-      <div class="letter-card">
-      <p class="eyebrow hero__eyebrow">THE WEDDING OF</p>
-      <figure class="keepsake-postage">
-        <div class="postage hero__stamp">
-          <span class="postage__issue">THE WEDDING POST</span>
-          <img src="../assets/our-moment.jpg" alt="우리의 결혼 소식을 전하는 사진 우표. 함께 웃고 있는 기훈과 승미" width="1536" height="1152" fetchpriority="high">
-          <span class="postage__caption"><span>WITH LOVE<br><small>기훈 · 승미</small></span><strong>03.28<small>2027</small></strong></span>
+      <div class="letter-card post-edition">
+        <div class="post-edition__imprint" aria-hidden="true"><span>WEDDING INVITATION</span><span>SEOUL &nbsp; / &nbsp; 2027</span></div>
+        <div class="post-edition__head" aria-hidden="true">
+          <span class="post-edition__botanical"></span>
+          <p class="post-edition__masthead"><span>Wedding</span><em>Post</em></p>
         </div>
-        <svg class="postage-cancellation" viewBox="0 0 160 86" aria-hidden="true">
-          <g transform="rotate(-12 81 43)">
-            <circle cx="43" cy="43" r="35"/><circle cx="43" cy="43" r="30"/>
-            <path d="M21 35h44M21 51h44M77 29c13-11 26 11 39 0s26 11 39 0M77 39c13-11 26 11 39 0s26 11 39 0M77 49c13-11 26 11 39 0s26 11 39 0M77 59c13-11 26 11 39 0s26 11 39 0"/>
-            <text x="43" y="27">SEOUL</text><text class="postage-cancellation__date" x="43" y="46">2027.03.28</text><text x="43" y="64">WITH LOVE</text>
-          </g>
-        </svg>
-        <figcaption class="postage-dedication">우리의 한 장면을 담아<br>소중한 당신께 보냅니다.</figcaption>
-      </figure>
-      <h1 class="hero__names" id="letter-title">이기훈 <span>·</span> 한승미</h1>
-      <div class="hero__details">
-        <p class="hero__date">2027. 03. 28.</p>
-        <p>일요일 오전 11시 30분</p>
-        <p class="hero__venue">더채플앳청담</p>
+        <figure class="post-plate">
+          <div class="post-gum-shadow">
+            <div class="post-gum">
+              <div class="post-gum__rail" aria-hidden="true"><span>SEOUL</span><span>MARCH 2027</span></div>
+              <img src="../assets/our-moment.jpg" alt="우표에 담긴 한 장면. 기훈과 승미가 함께 누워 웃고 있습니다." width="1536" height="1152" fetchpriority="high">
+              <div class="post-gum__impression" aria-hidden="true"><em>With love,</em><span>03.28</span></div>
+            </div>
+          </div>
+          <svg class="post-edition__cancel" viewBox="0 0 165 92" aria-hidden="true" focusable="false">
+            <g class="post-edition__cancel-ink" transform="rotate(-10 81 47)">
+              <g class="post-edition__postmark">
+                <circle cx="43" cy="46" r="35.5"/><circle cx="43" cy="46" r="31.4"/>
+                <path d="M13 36.5h60M13 53.5h60"/>
+                <text x="43" y="29.5">SEOUL</text><text class="post-edition__date-ink" x="43" y="48.5">2027.03.28</text><text x="43" y="66">WITH LOVE</text>
+              </g>
+              <g class="post-edition__waves"><path d="M77 30c13-10 25 10 39 0s27 10 42 0M77 40c13-10 25 10 39 0s27 10 42 0M77 50c13-10 25 10 39 0s27 10 42 0M77 60c13-10 25 10 39 0s27 10 42 0"/></g>
+            </g>
+          </svg>
+          <figcaption class="post-plate__dedication">소중한 당신께</figcaption>
+        </figure>
+        <div class="post-record">
+          <h1 class="post-record__names" id="letter-title">이기훈 <span>·</span> 한승미</h1>
+          <div class="post-record__details">
+            <time datetime="2027-03-28T11:30:00+09:00"><strong>2027. 03. 28.</strong><span>일요일 오전 11시 30분</span></time>
+            <div class="post-record__place"><small>VENUE</small><span>더채플앳청담</span></div>
+          </div>
+        </div>
+        <a class="post-edition__open" href="#promise-story"><span>우리의 편지 읽기</span><svg viewBox="0 0 25 20" aria-hidden="true"><path d="M2 10h19m-7-6 7 6-7 6"/></svg></a>
       </div>
-      <a class="scroll-cue" href="#promise-story" aria-label="아래로 스크롤하여 두 사람의 이야기 보기"><span>아래로 펼쳐지는 우리의 이야기</span><svg viewBox="0 0 24 30" aria-hidden="true"><path d="M12 1v26M4 19l8 8 8-8"/></svg></a>
-      </div>
-      <div class="sleeve-edge" aria-hidden="true"></div>
     </header>
 
     <header class="hero hero--photo" aria-labelledby="photo-title">
@@ -111,35 +124,56 @@
     <section class="letter-story" id="promise-story" aria-labelledby="promise-title">
       <div class="letter-stage">
         <div class="letter-story__heading">
-          <p class="eyebrow">A LETTER, FOR YOU</p>
+          <p class="eyebrow">A letter for you</p>
           <h2 id="promise-title">마음을 담아,<br>당신께 보냅니다.</h2>
         </div>
+
         <div class="letter-story__art">
-          <div class="postal-grid" aria-hidden="true"><span>TO OUR DEAREST</span><span>SEOUL · 2027</span></div>
-          <div class="letter-backing letter-backing--left" aria-hidden="true"></div>
-          <div class="letter-backing letter-backing--right" aria-hidden="true"></div>
-          <div class="postal-back" aria-hidden="true"></div>
-          <figure class="story-photo">
-            <img src="../assets/our-moment.jpg" alt="함께 누워 웃으며 손을 뻗는 기훈과 승미의 사진" width="1536" height="1152" loading="lazy">
-            <figcaption><span>A moment, sent with love.</span><small>기훈 · 승미 &nbsp; / &nbsp; 2027. 03. 28.</small></figcaption>
-          </figure>
-          <div class="postal-cover" aria-hidden="true">
-            <span class="postal-cover__edition">THE WEDDING POST<br>기훈과 승미의 결혼 소식</span>
-            <span class="postal-love-stamp"><img src="../assets/our-moment.jpg" alt="" width="1536" height="1152" loading="lazy"><small>03.28 · 2027</small></span>
-            <span class="postal-addressee"><small>받는 분</small><strong>소중한 당신께</strong></span>
-            <svg class="postal-postmark" viewBox="0 0 160 86">
-              <circle cx="43" cy="43" r="35"/><circle cx="43" cy="43" r="30"/>
-              <path d="M21 35h44M21 51h44M77 29c13-11 26 11 39 0s26 11 39 0M77 39c13-11 26 11 39 0s26 11 39 0M77 49c13-11 26 11 39 0s26 11 39 0M77 59c13-11 26 11 39 0s26 11 39 0"/>
-              <text x="43" y="27">SEOUL</text><text class="postage-cancellation__date" x="43" y="46">2027.03.28</text><text x="43" y="64">WITH LOVE</text>
-            </svg>
-            <span class="postal-sender">보내는 이 &nbsp; 이기훈 · 한승미</span>
+          <svg class="postal-current" viewBox="0 0 480 180" preserveAspectRatio="none" aria-hidden="true">
+            <path pathLength="1" d="M-12 109 C45 163 87 158 140 100 S237 33 291 88 S402 143 492 52"/>
+            <path pathLength="1" d="M-12 118 C45 172 87 167 140 109 S237 42 291 97 S402 152 492 61"/>
+            <path pathLength="1" d="M-12 127 C45 181 87 176 140 118 S237 51 291 106 S402 161 492 70"/>
+          </svg>
+          <div class="postal-packet">
+            <div class="packet-recto" aria-hidden="true">
+              <div class="packet-stamp">
+                <img src="../assets/our-moment.jpg" width="1536" height="1152" alt="" loading="lazy">
+                <span>03.28 · 2027</span>
+              </div>
+              <svg class="packet-cancel" viewBox="0 0 146 72" aria-hidden="true">
+                <circle cx="37" cy="36" r="31"/><circle cx="37" cy="36" r="27"/>
+                <path d="M15 29h44M15 44h44M67 23q10-7 20 0t20 0t20 0t20 0M67 32q10-7 20 0t20 0t20 0t20 0M67 41q10-7 20 0t20 0t20 0t20 0M67 50q10-7 20 0t20 0t20 0t20 0"/>
+                <text x="37" y="23">SEOUL</text><text x="37" y="39">2027.03.28</text><text x="37" y="55">WITH LOVE</text>
+              </svg>
+              <div class="packet-address"><span>받는 분</span><strong>소중한 당신께</strong></div>
+              <p class="packet-sender">이기훈 · 한승미 드림</p>
+            </div>
+            <div class="packet-verso">
+              <div class="packet-back packet-paper" aria-hidden="true"></div>
+              <div class="packet-lid packet-paper" aria-hidden="true">
+                <div class="packet-hinge">
+                  <span class="flap-outside"></span>
+                  <span class="flap-lining"></span>
+                </div>
+              </div>
+              <figure class="story-photo">
+                <img src="../assets/our-moment.jpg" width="1536" height="1152" loading="lazy" alt="나란히 누워 손을 뻗고 웃는 기훈과 승미">
+                <figcaption><span>With love,</span><small>2027. 03. 28.</small></figcaption>
+              </figure>
+              <div class="packet-pocket packet-paper" aria-hidden="true">
+                <svg viewBox="0 0 300 200" preserveAspectRatio="none">
+                  <path d="M0 0 150 106 300 0M0 200l114-108m186 108L186 92"/>
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
+
         <div class="letter-story__copy">
           <p class="story-line story-line--one"><span>우리의 가장 소중한 소식을</span></p>
           <p class="story-line story-line--two"><span>당신에게 전합니다.</span></p>
         </div>
-        <p class="letter-story__hint" aria-hidden="true">천천히, 편지를 펼쳐 주세요 <span>↓</span></p>
+        <p class="letter-story__hint" aria-hidden="true">편지를 따라 내려주세요 <span>↓</span></p>
         <div class="letter-story__progress" aria-hidden="true"><span></span></div>
       </div>
     </section>
@@ -149,7 +183,7 @@
       <div class="paper-panel paper-panel--upper">
       <p class="eyebrow">A LETTER TO YOU</p>
       <h2 id="invitation-title">소중한 당신을<br>초대합니다</h2>
-      <span class="small-ampersand" aria-hidden="true">&amp;</span>
+      <span class="letter-flower" aria-hidden="true"></span>
       </div>
       <div class="paper-panel paper-panel--lower">
       <p class="invitation-copy">서로의 하루를 가장 가까이에서 바라보며<br>평생을 함께 걷기로 약속했습니다.</p>
@@ -216,22 +250,23 @@
       </div>
     </section>
 
-    <section class="section moments-section" aria-labelledby="moments-title">
+    <section class="section moments-section" id="our-moment" aria-labelledby="moments-title">
       <div class="section-heading"><p class="eyebrow">OUR MOMENT</p><h2 id="moments-title">우리의 한 장면</h2></div>
       <div class="print-stage">
       <figure class="moment">
         <button class="moment__open" type="button" id="open-photo" data-open-photo aria-label="우리의 사진 크게 보기"><img src="../assets/our-moment.jpg" alt="함께 누워 손을 뻗으며 웃는 기훈과 승미" width="1536" height="1152" loading="lazy"><span class="moment__expand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></svg></span></button>
-        <figcaption><span>Ordinary days, extraordinary love.</span><span>01</span></figcaption>
+        <figcaption><span>기훈과 승미</span><span>Our moment</span></figcaption>
       </figure>
       </div>
       <p class="moment-note">가장 평범한 날에도,<br>가장 특별한 우리로.</p>
     </section>
 
-    <section class="section date-section" aria-labelledby="date-title">
-      <p class="eyebrow">SAVE THE DATE</p>
-      <h2 id="date-title">우리의 시작</h2>
-      <p class="date-lockup">03<span>/</span>28</p>
-      <p class="date-full"><time datetime="2027-03-28T11:30:00+09:00">2027년 3월 28일 일요일<br>오전 11시 30분</time></p>
+    <section class="section date-section" id="ceremony" aria-labelledby="date-title">
+      <div class="ceremony-heading"><p class="eyebrow">SAVE THE DATE</p><h2 id="date-title">예식 일시</h2></div>
+      <div class="date-folio">
+        <p class="date-lockup" aria-hidden="true">03<span>/</span>28</p>
+        <p class="date-full"><time datetime="2027-03-28T11:30:00+09:00">2027년 3월 28일 일요일<br>오전 11시 30분</time></p>
+      </div>
       <table class="calendar" aria-label="2027년 3월 달력, 28일 결혼식">
         <caption>MARCH 2027</caption>
         <thead><tr><th scope="col">일</th><th scope="col">월</th><th scope="col">화</th><th scope="col">수</th><th scope="col">목</th><th scope="col">금</th><th scope="col">토</th></tr></thead>
@@ -257,14 +292,12 @@
         <button class="text-button" type="button" id="copy-address">주소 복사 <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 7h9v10H7zM4 13H3V3h10v1"/></svg></button>
       </div>
       <div class="map-links"><a class="button" href="https://map.naver.com/p/search/%EB%8D%94%EC%B1%84%ED%94%8C%EC%95%B3%EC%B2%AD%EB%8B%B4" target="_blank" rel="noopener noreferrer">네이버 지도 <span aria-hidden="true">↗</span><span class="visually-hidden">(새 창)</span></a><a class="button button--outline" href="https://map.kakao.com/?q=%EB%8D%94%EC%B1%84%ED%94%8C%EC%95%B3%EC%B2%AD%EB%8B%B4" target="_blank" rel="noopener noreferrer">카카오맵 <span aria-hidden="true">↗</span><span class="visually-hidden">(새 창)</span></a></div>
-      <div class="travel-note"><p class="travel-note__label">오시는 길 안내</p><p>자세한 경로와 교통편은<br>지도에서 확인해 주세요.</p></div>
     </section>
 
     <section class="section guest-photo-section" id="wedding-snap" aria-labelledby="guest-photo-title">
-      <p class="eyebrow">OUR WEDDING SNAP</p>
-      <h2 id="guest-photo-title">당신의 시선으로<br>담은 하루</h2>
+      <div class="snap-heading"><p class="eyebrow">WEDDING SNAP</p>
+      <h2 id="guest-photo-title">당신의 시선으로<br>담은 하루</h2></div>
       <div class="guest-camera" aria-hidden="true">
-        <span class="guest-camera__edition">A DAY TO REMEMBER</span>
         <svg viewBox="0 0 160 112">
           <path d="M25 34h24l8-13h43l9 13h24a9 9 0 0 1 9 9v48a9 9 0 0 1-9 9H25a9 9 0 0 1-9-9V43a9 9 0 0 1 9-9Z"/>
           <path d="M29 34v-7h16v7M17 47h125M17 86h34m59 0h32M63 28h31"/>
@@ -278,7 +311,6 @@
       <p class="guest-photo-copy">저희가 미처 보지 못한 웃음과<br>함께 나눈 따뜻한 순간들.</p>
       <p class="guest-photo-copy">당신이 담아 주신 사진과 영상을 보내 주세요.<br>소중한 하루를 오래도록 간직하겠습니다.</p>
       <button class="button guest-photo-button" id="open-guest-upload" type="button">사진·영상 보내기 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4l2-3h5l2 3h3v13H4Z"/><circle cx="12" cy="13" r="4"/></svg></button>
-      <p class="guest-photo-footnote">우리의 하루를 함께 기록해 주세요.</p>
     </section>
 
     <footer class="closing">
@@ -289,6 +321,14 @@
       <p class="closing__date">MARCH 28, 2027</p>
       <a class="back-top" href="#top">처음으로 <span aria-hidden="true">↑</span></a>
     </footer>
+    <details class="design-archive">
+      <summary>청첩장 시안 보기</summary>
+      <nav class="design-switcher" aria-label="청첩장 시안 선택">
+        <a href="?design=letter" data-design-link="letter">편지</a>
+        <a href="?design=photo" data-design-link="photo">사진</a>
+        <a href="?design=emboss" data-design-link="emboss">여백</a>
+      </nav>
+    </details>
   </main>
 
   <dialog class="photo-dialog" id="photo-dialog" aria-label="기훈과 승미의 사진">
@@ -328,9 +368,9 @@
     </form>
   </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js?v=11"></script>
+  <script src="script.js?v=13"></script>
   <script src="config.js?v=11"></script>
   <script src="guest-upload.js?v=11"></script>
-  <script src="interactions.js?v=12"></script>
+  <script src="interactions.js?v=13"></script>
 </body>
 </html>

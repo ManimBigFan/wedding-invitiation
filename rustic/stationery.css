@@ -1,0 +1,234 @@
+/* The guest navigation stays within the invitation's mobile column. */
+.invitation-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  width: min(100%, 480px);
+  height: 64px;
+  margin-inline: auto;
+  padding-inline: 8px;
+  color: #483539;
+  background: #f7f1e6;
+  border-bottom: 1px solid #cbbdad;
+  font-family: var(--sans);
+}
+.invitation-nav a {
+  position: relative;
+  display: grid;
+  min-height: 44px;
+  place-items: center;
+  font-size: 12px;
+}
+.invitation-nav a[aria-current="location"]::after {
+  position: absolute;
+  bottom: 4px;
+  width: 15px;
+  height: 2px;
+  background: #875354;
+  content: "";
+}
+.design-archive { padding: 4px 20px 14px; text-align: center; background: var(--paper); }
+.design-archive summary {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  cursor: pointer;
+  font: 11px var(--sans);
+}
+.design-archive summary::-webkit-details-marker { display: none; }
+.design-archive summary::after { content: "+"; }
+.design-archive[open] summary::after { content: "−"; }
+.design-archive .design-switcher {
+  position: static;
+  justify-content: center;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+}
+.letter-flower {
+  display: block;
+  width: 50px;
+  height: 48px;
+  margin: 18px auto 0;
+  background: #927659;
+  -webkit-mask: url("../assets/postal-botanical.svg") center / contain no-repeat;
+  mask: url("../assets/postal-botanical.svg") center / contain no-repeat;
+}
+[data-design=letter] {
+  --paper: #f3eddf;
+  --paper-light: #fcf8ee;
+  --ink: #493034;
+  --muted: #68584e;
+  --line: #cbbcac;
+  --stone: #e6ddcd;
+  --wine: #46292e;
+  --copper: #a78160;
+}
+[data-design=letter] body { background: #ddd5ca; }
+[data-design=letter] .invitation-page { box-shadow: 0 15px 65px #412a2624; }
+[data-design=letter] .invitation-page::before { display: none; }
+[data-design=letter] .section { padding-inline: clamp(22px, 7vw, 38px); }
+[data-design=letter] .section h2 { font-size: clamp(26px, 7.3vw, 35px); line-height: 1.5; }
+[data-design=letter] .section .eyebrow { color: #775a49; font-size: 11px; letter-spacing: 2.5px; }
+[data-design=letter] .button { min-height: 52px; font-size: 13px; }
+[data-design=letter] .button--outline { border-color: #ad9987; }
+[data-design=letter] :is(a, button, summary):focus-visible { outline: 3px solid #ae805b; outline-offset: 3px; }
+
+/* A double hairline follows both halves of the folded invitation sheet. */
+[data-design=letter] .invitation-section {
+  padding: 64px clamp(17px, 5vw, 28px) 76px;
+  background: linear-gradient(157deg, #e9dfce, #f2ebdf 48%, #dfd4c4);
+}
+[data-design=letter] .paper-fold { filter: drop-shadow(0 12px 13px #56392816); }
+[data-design=letter] .paper-panel {
+  background: linear-gradient(110deg, #f9f4e8, #fffaf1 72%, #f5ecdd);
+}
+[data-design=letter] .paper-panel--upper { padding: 44px 12px 18px; }
+[data-design=letter] .paper-panel--lower { padding: 24px 12px 43px; }
+[data-design=letter] .paper-panel--upper::before,
+[data-design=letter] .paper-panel--lower::after {
+  position: absolute;
+  inset: 9px 9px 0;
+  border: 1px solid #bba8898a;
+  border-bottom: 0;
+  pointer-events: none;
+  content: "";
+}
+[data-design=letter] .paper-panel--lower::after { inset: 0 9px 9px; border: 1px solid #bba8898a; border-top: 0; }
+[data-design=letter] .invitation-copy { font-size: clamp(12px, 3.35vw, 14px); line-height: 2.15; }
+[data-design=letter] .signature { margin-top: 29px; }
+
+/* An album spread gives the existing photograph its own space. */
+[data-design=letter] .moments-section {
+  padding: 60px clamp(20px, 5vw, 28px) 54px;
+  color: #f9f1e2;
+  background: #38262a;
+}
+[data-design=letter] .moments-section .section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 0 19px;
+  margin: 0 0 23px;
+  border-bottom: 1px solid #a582686e;
+}
+[data-design=letter] .moments-section h2 { order: -1; margin: 0; text-align: left; font-size: clamp(23px, 6vw, 30px); }
+[data-design=letter] .moments-section .eyebrow { font-size: 9px; color: #e7ccae; letter-spacing: 1.6px; }
+[data-design=letter] .moment { margin: 0; }
+[data-design=letter] .moment__open { padding: 7px; background: #f5efdf; border-color: #f5efdf; }
+[data-design=letter] .moment__open img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+[data-design=letter] .moment figcaption { color: #ead7c3; padding: 13px 0 0; font-size: 12px; }
+[data-design=letter] .moment figcaption span:first-child { font: 11px var(--serif); }
+[data-design=letter] .moment figcaption span:last-child { font-size: 17px; font-style: italic; }
+[data-design=letter] .moment-note { color: #eee0ce; font-size: 13px; margin-top: 34px; }
+
+/* The date and venue are set like two facing pages of the same programme. */
+[data-design=letter] .date-section { background: #faf5e9; padding-block: 67px 58px; }
+[data-design=letter] .ceremony-heading,
+[data-design=letter] .location-section > :is(.eyebrow, h2) { text-align: left; }
+[data-design=letter] .ceremony-heading h2,
+[data-design=letter] .location-section h2 { margin-top: 6px; }
+[data-design=letter] .date-folio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 21px;
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+}
+[data-design=letter] .date-lockup { margin: 0; font-size: clamp(62px, 17vw, 84px); letter-spacing: -3px; line-height: .98; }
+[data-design=letter] .date-lockup span { color: #a58367; font-size: .69em; padding: 0 3px; }
+[data-design=letter] .date-full { margin: 0; font-size: 12px; text-align: right; line-height: 1.9; }
+[data-design=letter] .calendar { max-width: none; }
+[data-design=letter] .calendar caption { padding: 16px 0 13px; border-top: 1px solid var(--line); font-size: 12px; }
+[data-design=letter] .calendar th { font-size: 11px; color: var(--muted); }
+[data-design=letter] .calendar td { height: 37px; }
+[data-design=letter] .calendar .wedding-day span { color: #fff7e8; background: var(--wine); border-radius: 2px 9px 2px 9px; }
+[data-design=letter] .countdown { color: var(--ink); margin: 23px 0 22px; }
+[data-design=letter] .location-section { background: #ebe2d2; padding-block: 59px; }
+[data-design=letter] .venue-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0,1fr);
+  align-items: start;
+  gap: 3px 13px;
+  margin: 24px 0 15px;
+  padding: 30px 18px 24px;
+  border: 3px double #bfae96;
+  background: #f8f2e6;
+  text-align: left;
+}
+[data-design=letter] .venue-mark { grid-row: 1 / span 3; width: 32px; height: 42px; margin: 2px 0 0; color: #8e6751; }
+[data-design=letter] .venue-card h3 { margin: 0; font-size: 23px; line-height: 1.45; }
+[data-design=letter] .venue-card > p { margin-top: 5px; font: 12px/1.8 var(--sans); }
+[data-design=letter] #copy-address { justify-self: start; padding: 0; margin: 1px 0 -6px; font-size: 11px; }
+[data-design=letter] .map-links .button { padding-inline: 14px; }
+
+/* A small camera print sits in the margin of the guest invitation. */
+[data-design=letter] .guest-photo-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(86px, 23vw, 108px);
+  gap: 0 10px;
+  align-items: center;
+  text-align: left;
+  padding-block: 63px;
+  background: #fcf7ed;
+}
+[data-design=letter] .snap-heading { grid-column: 1; grid-row: 1; }
+[data-design=letter] .snap-heading h2 { margin-top: 12px; font-size: clamp(22px, 6.4vw, 31px); line-height: 1.5; }
+[data-design=letter] .guest-camera {
+  grid-column: 2; grid-row: 1; width: 100%; margin: 0; padding: 6px;
+  color: #80574d; background: #efe4d2; outline-offset: 2px; transform: rotate(5deg);
+}
+[data-design=letter] .guest-camera > svg { width: 90%; height: auto; margin: 6px auto 0; }
+[data-design=letter] .guest-camera__caption { font-size: 12px; line-height: 1.2; text-align: center; }
+[data-design=letter] .guest-photo-copy,
+[data-design=letter] .guest-photo-button { grid-column: 1 / -1; }
+[data-design=letter] .guest-photo-copy { margin-top: 25px; font-size: 13px; line-height: 2; }
+[data-design=letter] .guest-photo-copy + .guest-photo-copy { margin-top: 7px; }
+[data-design=letter] .guest-photo-button { margin-top: 25px; background: var(--wine); }
+
+[data-design=letter] .closing {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #fff6e8;
+  background: linear-gradient(148deg, #583139, #352027);
+  padding: 60px clamp(24px, 8vw, 42px) 12px;
+}
+[data-design=letter] .closing::before {
+  position: absolute;
+  z-index: -1;
+  top: -17px; right: -26px; width: 125px; height: 152px;
+  background: #c9aa85;
+  opacity: .52;
+  transform: rotate(-16deg);
+  -webkit-mask: url("../assets/postal-botanical.svg") center / contain no-repeat;
+  mask: url("../assets/postal-botanical.svg") center / contain no-repeat;
+  content: "";
+}
+[data-design=letter] .closing__script { font-size: clamp(58px, 15vw, 72px); letter-spacing: -2px; }
+[data-design=letter] .closing__names { margin-top: 12px; }
+[data-design=letter] .closing__names span { color: #e3c3a1; }
+[data-design=letter] .closing__message { color: #f1e0d0; font-size: 13px; }
+[data-design=letter] .closing .button { color: #ffeeda; border-color: #ba9b82; background: transparent; }
+[data-design=letter] .closing .button:hover { background: #ffffff12; }
+[data-design=letter] .closing__date { color: #efd4b7; }
+@media (max-width: 359px) {
+  [data-design=letter] .date-folio { flex-wrap: wrap; }
+  [data-design=letter] .section .eyebrow { letter-spacing: 1.7px; }
+  [data-design=letter] .paper-panel--lower { padding-inline: 10px; }
+  [data-design=letter] .invitation-copy { letter-spacing: -.4px; }
+}
+@media print {
+  .invitation-nav, .design-archive { display: none; }
+}

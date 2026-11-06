@@ -164,7 +164,15 @@
   let lastStory = -1;
   const foldProperties = ['--fold-upper', '--fold-lower', '--fold-shade', '--crease-opacity', '--fold-shadow-y', '--fold-shadow-blur', '--fold-shadow-opacity'];
   const printProperties = ['--print-y', '--print-rotation', '--print-scale', '--print-clip', '--print-shadow-y', '--print-shadow-blur', '--print-shadow-opacity'];
-  const storyProperties = ['--heading-opacity', '--heading-y', '--grid-opacity', '--grid-angle', '--grid-scale', '--envelope-x', '--envelope-y', '--envelope-angle', '--envelope-opacity', '--postmark-opacity', '--postmark-scale', '--photo-x', '--photo-y', '--photo-angle', '--photo-scale', '--photo-clip', '--photo-shadow-y', '--photo-shadow-blur', '--backing-opacity', '--backing-y', '--backing-left', '--backing-right', '--line-one-opacity', '--line-one-y', '--line-two-opacity', '--line-two-y', '--hint-opacity', '--story-progress'];
+  const storyProperties = [
+    '--heading-opacity', '--heading-y', '--hint-opacity', '--story-progress',
+    '--wave-opacity', '--wave-offset', '--packet-tilt', '--front-turn', '--back-turn',
+    '--front-visible', '--back-visible', '--postmark-opacity', '--postmark-scale',
+    '--flap-angle', '--lid-order', '--envelope-x', '--envelope-y', '--envelope-angle',
+    '--envelope-opacity', '--photo-x', '--photo-y', '--photo-angle', '--photo-scale',
+    '--photo-clip', '--print-silver', '--line-one-opacity', '--line-one-y',
+    '--line-two-opacity', '--line-two-y'
+  ];
 
   function clearProperties(element, properties) {
     if (element) properties.forEach(property => element.style.removeProperty(property));
@@ -195,42 +203,50 @@
 
   function updateStory(progress) {
     const postmark = phase(.015, .085, progress);
-    const pull = phase(.08, .48, progress);
-    const release = phase(.18, .69, progress);
-    const settle = phase(.45, .78, progress);
-    const headingOut = phase(.10, .32, progress);
-    const lineOne = phase(.55, .70, progress);
-    const lineTwo = phase(.70, .87, progress);
-    const diagonal = Math.sin(pull * Math.PI);
+    const wave = phase(.07, .31, progress);
+    const turn = phase(.13, .34, progress);
+    const unfold = phase(.34, .51, progress);
+    const lift = phase(.45, .69, progress);
+    const departure = phase(.54, .81, progress);
+    const settle = phase(.65, .85, progress);
+    const develop = phase(.61, .86, progress);
+    const headingOut = phase(.16, .32, progress);
+    const lineOne = phase(.72, .84, progress);
+    const lineTwo = phase(.82, .93, progress);
+    const arc = Math.sin(lift * Math.PI);
+
+    // The recto and verso share one hinge. The flap moves behind the print
+    // exactly as it crosses the edge-on pose; the pocket stays in front.
     const values = {
       '--heading-opacity': (1 - headingOut).toFixed(3),
-      '--heading-y': `${(-headingOut * 28).toFixed(1)}px`,
-      '--grid-opacity': (.52 * (1 - phase(.30, .62, progress))).toFixed(3),
-      '--grid-angle': `${(-release * 6).toFixed(2)}deg`,
-      '--grid-scale': (1 + release * .045).toFixed(3),
-      '--envelope-x': `${(release * 120).toFixed(1)}px`,
-      '--envelope-y': `${(release * 180).toFixed(1)}px`,
-      '--envelope-angle': `${(-6 + release * 28).toFixed(2)}deg`,
-      '--envelope-opacity': (1 - phase(.48, .72, progress)).toFixed(3),
+      '--heading-y': `${(-headingOut * 22).toFixed(1)}px`,
+      '--hint-opacity': (1 - phase(.04, .16, progress)).toFixed(3),
+      '--story-progress': progress.toFixed(4),
+      '--wave-opacity': (wave * (1 - phase(.33, .54, progress))).toFixed(3),
+      '--wave-offset': (1 - wave).toFixed(3),
+      '--packet-tilt': `${(-7 + 5 * turn + 2 * settle).toFixed(2)}deg`,
+      '--front-turn': `${(-180 * turn).toFixed(2)}deg`,
+      '--back-turn': `${(180 * (1 - turn)).toFixed(2)}deg`,
+      '--front-visible': turn < .5 ? 'visible' : 'hidden',
+      '--back-visible': turn < .5 ? 'hidden' : 'visible',
       '--postmark-opacity': (.8 * postmark).toFixed(3),
       '--postmark-scale': (1.4 - .4 * postmark).toFixed(3),
-      '--photo-x': `${(diagonal * 30 * (1 - settle)).toFixed(1)}px`,
-      '--photo-y': `${(65 - pull * 140 + settle * 75).toFixed(1)}px`,
-      '--photo-angle': `${(-5 * (1 - settle) + diagonal * 14).toFixed(2)}deg`,
-      '--photo-scale': (.72 + pull * .30 - settle * .02).toFixed(3),
-      '--photo-clip': `${(38 * (1 - pull)).toFixed(1)}%`,
-      '--photo-shadow-y': `${(7 + diagonal * 10 + settle * 3).toFixed(1)}px`,
-      '--photo-shadow-blur': `${(18 + diagonal * 18 + settle * 4).toFixed(1)}px`,
-      '--backing-opacity': phase(.25, .55, progress).toFixed(3),
-      '--backing-y': `${(30 * (1 - settle)).toFixed(1)}px`,
-      '--backing-left': `${(-14 + settle * 11).toFixed(2)}deg`,
-      '--backing-right': `${(12 - settle * 10).toFixed(2)}deg`,
+      '--flap-angle': `${(177 * unfold).toFixed(2)}deg`,
+      '--lid-order': unfold * 177 < 90 ? '5' : '1',
+      '--envelope-x': `${(134 * departure).toFixed(1)}px`,
+      '--envelope-y': `${(185 * departure).toFixed(1)}px`,
+      '--envelope-angle': `${(21 * departure).toFixed(2)}deg`,
+      '--envelope-opacity': (1 - phase(.61, .81, progress)).toFixed(3),
+      '--photo-x': `${(-19 * arc).toFixed(1)}px`,
+      '--photo-y': `${(-87 * lift + 87 * settle).toFixed(1)}px`,
+      '--photo-angle': `${(-8 * arc).toFixed(2)}deg`,
+      '--photo-scale': (.64 + .39 * lift - .03 * settle).toFixed(3),
+      '--photo-clip': `${(8 * (1 - lift)).toFixed(1)}%`,
+      '--print-silver': (1 - develop).toFixed(3),
       '--line-one-opacity': lineOne.toFixed(3),
       '--line-one-y': `${(110 * (1 - lineOne)).toFixed(1)}%`,
       '--line-two-opacity': lineTwo.toFixed(3),
-      '--line-two-y': `${(110 * (1 - lineTwo)).toFixed(1)}%`,
-      '--hint-opacity': (1 - phase(.03, .18, progress)).toFixed(3),
-      '--story-progress': progress.toFixed(4)
+      '--line-two-y': `${(110 * (1 - lineTwo)).toFixed(1)}%`
     };
     Object.entries(values).forEach(([property, value]) => story.style.setProperty(property, value));
   }

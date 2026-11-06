@@ -25,6 +25,7 @@
   }
 
   applyDesign(new URLSearchParams(location.search).get('design'));
+  const designArchive = document.querySelector('.design-archive');
   links.forEach(link => link.addEventListener('click', event => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
@@ -32,9 +33,38 @@
     url.searchParams.set('design', link.dataset.designLink);
     url.hash = '';
     history.pushState(null, '', url);
+    if (designArchive) designArchive.open = false;
     applyDesign(link.dataset.designLink, true);
   }));
   window.addEventListener('popstate', () => applyDesign(new URLSearchParams(location.search).get('design')));
+
+  const contents = document.querySelector('.invitation-nav');
+  if (contents) {
+    const stops = [...contents.querySelectorAll('a[href^="#"]')].map(link => ({
+      link,
+      section: document.getElementById(link.hash.slice(1))
+    })).filter(stop => stop.section);
+    let activeLink;
+    let navFrame = 0;
+    function markReadingPosition() {
+      navFrame = 0;
+      const readingLine = contents.getBoundingClientRect().bottom + 24;
+      const current = stops.reduce((last, stop) =>
+        stop.section.getBoundingClientRect().top <= readingLine ? stop : last, stops[0]);
+      if (!current || current.link === activeLink) return;
+      activeLink?.removeAttribute('aria-current');
+      current.link.setAttribute('aria-current', 'location');
+      activeLink = current.link;
+    }
+    function queueNavUpdate() {
+      if (!navFrame) navFrame = requestAnimationFrame(markReadingPosition);
+    }
+    window.addEventListener('scroll', queueNavUpdate, { passive: true });
+    window.addEventListener('resize', queueNavUpdate);
+    window.addEventListener('pageshow', queueNavUpdate);
+    document.addEventListener('wedding:designchange', queueNavUpdate);
+    queueNavUpdate();
+  }
 
   async function copyText(text, successMessage) {
     try {
